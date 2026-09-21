@@ -80,7 +80,8 @@ Before deploying the staging Worker or applying its first remote migration:
 
 1. Create a Cloudflare Access self-hosted application for the staging hostname. Require the
    operator identity group and deny unauthenticated requests; do not expose the dashboard on an
-   unprotected `workers.dev` URL.
+   unprotected `workers.dev` URL. The Worker rejects all non-local requests whose hostname ends in
+   `workers.dev`, so the Access-protected custom hostname must be configured before smoke testing.
 2. Set the staging admin credential as a Wrangler secret from the operator terminal:
 
    ```sh

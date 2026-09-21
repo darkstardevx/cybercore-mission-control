@@ -75,6 +75,12 @@ function requestId(request: Request): string {
   return request.headers.get(REQUEST_ID)?.trim() || crypto.randomUUID();
 }
 
+function rejectsUnprotectedWorkerHostname(request: Request, env: Env): boolean {
+  if (env.ENVIRONMENT === "local") return false;
+  const hostname = new URL(request.url).hostname.toLowerCase();
+  return hostname === "workers.dev" || hostname.endsWith(".workers.dev");
+}
+
 function adminAuthorized(request: Request, env: Env): boolean {
   const provided = request.headers.get("x-mission-control-admin");
   const websocketProtocol = request.headers.get("sec-websocket-protocol")?.split(",").map((value) => value.trim()).find((value) => value.startsWith("mc-admin."));
@@ -194,6 +200,7 @@ async function handleApi(request: Request, env: Env): Promise<Response> {
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     try {
+      if (rejectsUnprotectedWorkerHostname(request, env)) return new Response("Not found", { status: 404 });
       if (new URL(request.url).pathname.startsWith("/api/")) return await handleApi(request, env);
       return env.ASSETS.fetch(request);
     } catch (error) {
