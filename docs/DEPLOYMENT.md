@@ -58,7 +58,9 @@ heartbeat, rejects its replayed nonce, confirms durable audit events, and shuts 
 npm run smoke:local
 ```
 
-The smoke state is removed on exit and never contacts Cloudflare.
+The smoke state is removed on exit and never contacts Cloudflare. Run it from a local operator
+terminal or a dedicated integration runner; the cross-platform CI job intentionally stops at the
+deterministic Wrangler binding dry run and does not own a long-lived local dev process.
 
 ## Deployment boundary
 

@@ -55,5 +55,3 @@ jobs:
         run: npm run preflight && npm run test:preflight
       - name: Validate staging bindings
         run: npx wrangler deploy --env=staging --dry-run --outdir /tmp/cybercore-mission-control-dry-run
-      - name: Run local end-to-end smoke
-        run: npm run smoke:local
