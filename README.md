@@ -8,8 +8,8 @@ a Durable Object live-event channel, and a static dashboard.
 
 ## Status
 
-P3-M002 foundation + experimental Rust connector — alpha, local/demo ready. This is not a
-production control plane or release-ready agent package yet.
+P3-M003 release candidate hardening — alpha observation plane. The connector is packaged and
+checksummed for supported platforms, but this is still not a production control plane.
 
 ## Local development
 
@@ -88,6 +88,7 @@ events are durable; live event delivery is a convenience view.
 - [Architecture](docs/ARCHITECTURE.md)
 - [Security boundary](docs/SECURITY.md)
 - [Connector protocol](docs/CONNECTOR_PROTOCOL.md)
+- [Release policy](docs/RELEASE.md)
 - [Changelog](CHANGELOG.md)
 
 ## License

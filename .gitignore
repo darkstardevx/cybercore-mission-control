@@ -5,4 +5,9 @@ node_modules/
 dist/
 target/
 connector/config.json
+release-assets/
+cybercore-agent-*.tar.gz
+cybercore-agent-*.tar.gz.sha256
+cybercore-agent-*.zip
+cybercore-agent-*.zip.sha256
 .DS_Store

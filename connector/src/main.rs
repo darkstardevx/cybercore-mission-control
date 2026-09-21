@@ -1,8 +1,27 @@
-use cybercore_agent::{Connector, ConnectorError};
-use std::{env, path::PathBuf, process::ExitCode};
+use cybercore_agent::{version_line, Connector, ConnectorError};
+use std::{
+    env,
+    path::PathBuf,
+    process::ExitCode,
+    sync::{
+        atomic::{AtomicBool, Ordering},
+        Arc,
+    },
+};
 
 fn usage() {
-    eprintln!("usage: cybercore-agent --config <path> [once|run]");
+    println!("cybercore-agent — outbound Cybercore Mission Control heartbeat connector");
+    println!();
+    println!("usage: cybercore-agent --config <path> [once|run]");
+    println!();
+    println!("commands:");
+    println!("  once       publish one heartbeat (default)");
+    println!("  run        publish periodically until interrupted");
+    println!();
+    println!("options:");
+    println!("  --config <path>  read explicit JSON configuration");
+    println!("  --version        print version and build provenance");
+    println!("  --help           print this help");
 }
 
 fn main() -> ExitCode {
@@ -12,7 +31,12 @@ fn main() -> ExitCode {
     while let Some(arg) = args.next() {
         match arg.as_str() {
             "--config" => config = args.next().map(PathBuf::from),
-            "once" | "run" => mode = Box::leak(arg.into_boxed_str()),
+            "once" => mode = "once",
+            "run" => mode = "run",
+            "--version" | "-V" => {
+                println!("{}", version_line());
+                return ExitCode::SUCCESS;
+            }
             "--help" | "-h" => {
                 usage();
                 return ExitCode::SUCCESS;
@@ -38,15 +62,29 @@ fn main() -> ExitCode {
             }
             Err(error) => report(error),
         },
-        Ok(connector) => match connector.run_periodic(|result| {
-            println!(
-                "heartbeat accepted attempts={} observed_at={}",
-                result.attempts, result.observed_at
-            )
-        }) {
-            Ok(()) => ExitCode::SUCCESS,
-            Err(error) => report(error),
-        },
+        Ok(connector) => {
+            let stop = Arc::new(AtomicBool::new(false));
+            let signal_stop = Arc::clone(&stop);
+            if let Err(error) =
+                ctrlc::set_handler(move || signal_stop.store(true, Ordering::Relaxed))
+            {
+                return report(ConnectorError::Configuration(format!(
+                    "cannot install signal handler: {error}"
+                )));
+            }
+            match connector.run_periodic_until(
+                |result| {
+                    println!(
+                        "heartbeat accepted attempts={} observed_at={}",
+                        result.attempts, result.observed_at
+                    )
+                },
+                || stop.load(Ordering::Relaxed),
+            ) {
+                Ok(()) => ExitCode::SUCCESS,
+                Err(error) => report(error),
+            }
+        }
         Err(error) => report(error),
     }
 }

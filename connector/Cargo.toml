@@ -4,11 +4,17 @@ version = "0.1.0"
 edition = "2021"
 rust-version = "1.80"
 description = "Outbound-only heartbeat connector for Cybercore Mission Control"
-license = "MIT"
+license-file = "../LICENSE"
+readme = "README.md"
+repository = "https://github.com/darkstardevx/cybercore-mission-control"
+homepage = "https://github.com/darkstardevx/cybercore-mission-control"
+keywords = ["cybercore", "heartbeat", "connector", "observability"]
+categories = ["command-line-utilities", "network-programming"]
 publish = false
 
 [dependencies]
 chrono = { version = "0.4.45", default-features = false, features = ["clock", "std"] }
+ctrlc = "3.5.2"
 rand = "0.8.8"
 serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.151"

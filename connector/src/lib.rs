@@ -21,6 +21,18 @@ pub const MAX_RETRIES: u8 = 5;
 pub const MAX_TIMEOUT_SECS: u64 = 60;
 pub const MAX_INTERVAL_SECS: u64 = 24 * 60 * 60;
 pub const MAX_RETRY_DELAY_MS: u64 = 5_000;
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+pub const GIT_SHA: &str = match option_env!("CYBERCORE_GIT_SHA") {
+    Some(value) => value,
+    None => "unknown",
+};
+
+pub fn version_line() -> String {
+    format!(
+        "cybercore-agent {VERSION} (commit {GIT_SHA}, target {})",
+        option_env!("CYBERCORE_TARGET").unwrap_or("unknown")
+    )
+}
 
 #[derive(Debug)]
 pub enum ConnectorError {
@@ -491,6 +503,14 @@ mod tests {
     fn nonce_is_unique_and_prefixed() {
         assert_ne!(nonce(), nonce());
         assert!(nonce().starts_with("cybercore-"));
+    }
+
+    #[test]
+    fn version_contains_package_and_build_provenance() {
+        let version = version_line();
+        assert!(version.starts_with("cybercore-agent "));
+        assert!(version.contains("commit "));
+        assert!(version.contains("target "));
     }
 
     #[test]

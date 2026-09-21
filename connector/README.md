@@ -1,12 +1,12 @@
 # cybercore-agent
 
-Experimental outbound-only Rust connector for Cybercore Mission Control.
+Release-candidate outbound-only Rust connector for Cybercore Mission Control.
 
 ## Safety boundary
 
 This package publishes bounded heartbeat metadata. It does not listen for connections, receive
 commands, execute processes, upload files, or modify AgentForge state. Cloud responses are treated
-as acknowledgements only. The package is alpha software and is not release-ready.
+as acknowledgements only. The package is alpha software and remains subject to the release policy.
 
 ## Configure
 
@@ -35,8 +35,9 @@ cargo run --locked -p cybercore-agent -- --config connector/config.json run
 ```
 
 `once` sends one heartbeat. `run` repeats at the configured interval with bounded retries and
-timeouts. Stop it with the normal terminal interrupt. A non-success response is reported without
-including response bodies or credentials.
+timeouts. Stop it with Ctrl-C; shutdown is cooperative and bounded between heartbeat intervals. A
+non-success response is reported without including response bodies or credentials. Check build
+provenance with `cybercore-agent --version`.
 
 ## Validation
 

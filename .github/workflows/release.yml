@@ -1,0 +1,153 @@
+name: Release connector
+
+on:
+  push:
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing version tag to package"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+  RELEASE_TAG: ${{ github.event.inputs.tag || github.ref_name }}
+
+jobs:
+  verify:
+    name: Verify release source
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out exact release ref
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref_name }}
+          fetch-depth: 0
+      - name: Install stable Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          components: rustfmt, clippy
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+      - name: Check and test
+        run: |
+          cargo check --workspace --locked
+          cargo test --workspace --locked
+          cargo clippy --workspace --all-targets --locked -- -D warnings
+      - name: Verify tag matches package version
+        shell: bash
+        run: |
+          tag="$RELEASE_TAG"
+          version="$(sed -n 's/^version = "\([0-9][0-9.]*\)"$/\1/p' connector/Cargo.toml | head -1)"
+          test "$tag" = "v$version"
+          test "$(git status --porcelain)" = ""
+      - name: Verify package contents
+        run: cargo package --locked --allow-dirty -p cybercore-agent
+
+  build:
+    name: Build ${{ matrix.target }}
+    needs: verify
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            target: x86_64-unknown-linux-gnu
+            binary: cybercore-agent
+            archive: tar.gz
+          - os: macos-14
+            target: x86_64-apple-darwin
+            binary: cybercore-agent
+            archive: tar.gz
+          - os: macos-14
+            target: aarch64-apple-darwin
+            binary: cybercore-agent
+            archive: tar.gz
+          - os: windows-2022
+            target: x86_64-pc-windows-msvc
+            binary: cybercore-agent.exe
+            archive: zip
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Check out exact release ref
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref_name }}
+          fetch-depth: 0
+      - name: Install stable Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          targets: ${{ matrix.target }}
+      - name: Build release binary
+        env:
+          CYBERCORE_GIT_SHA: ${{ github.sha }}
+        run: cargo build --release --locked --target ${{ matrix.target }} -p cybercore-agent
+      - name: Package Unix archive
+        if: matrix.archive == 'tar.gz'
+        shell: bash
+        run: |
+          tag="$RELEASE_TAG"
+          version="${tag#v}"
+          dir="cybercore-agent-${version}-${{ matrix.target }}"
+          mkdir "$dir"
+          cp "target/${{ matrix.target }}/release/${{ matrix.binary }}" "$dir/"
+          cp LICENSE connector/README.md "$dir/"
+          tar -czf "$dir.tar.gz" "$dir"
+          sha256sum "$dir.tar.gz" > "$dir.tar.gz.sha256"
+      - name: Package Windows archive
+        if: matrix.archive == 'zip'
+        shell: pwsh
+        run: |
+          $tag = $env:RELEASE_TAG
+          $version = $tag.TrimStart('v')
+          $dir = "cybercore-agent-$version-${{ matrix.target }}"
+          New-Item -ItemType Directory -Path $dir | Out-Null
+          Copy-Item "target/${{ matrix.target }}/release/${{ matrix.binary }}" $dir
+          Copy-Item LICENSE, connector/README.md $dir
+          Compress-Archive -Path $dir -DestinationPath "$dir.zip"
+          (Get-FileHash "$dir.zip" -Algorithm SHA256).Hash.ToLower() + "  $dir.zip" | Set-Content "$dir.zip.sha256"
+      - name: Upload archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: connector-${{ matrix.target }}
+          path: |
+            cybercore-agent-*.tar.gz
+            cybercore-agent-*.zip
+            cybercore-agent-*.sha256
+
+  publish:
+    name: Publish checksummed release
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Download archives
+        uses: actions/download-artifact@v5
+        with:
+          pattern: connector-*
+          path: release-assets
+          merge-multiple: true
+      - name: Create manifest
+        shell: bash
+        run: |
+          tag="$RELEASE_TAG"
+          version="${tag#v}"
+          python3 - "$version" <<'PY'
+          import hashlib, json, pathlib, sys
+          version = sys.argv[1]
+          assets = []
+          for path in sorted(pathlib.Path("release-assets").glob("cybercore-agent-*.tar.gz")):
+              assets.append({"name": path.name, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()})
+          for path in sorted(pathlib.Path("release-assets").glob("cybercore-agent-*.zip")):
+              assets.append({"name": path.name, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()})
+          pathlib.Path("release-assets/manifest.json").write_text(json.dumps({"version": version, "assets": assets}, indent=2) + "\n")
+          PY
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "${{ github.event.inputs.tag || github.ref_name }}" release-assets/* --verify-tag --title "Cybercore Mission Control ${{ github.event.inputs.tag || github.ref_name }}" --generate-notes

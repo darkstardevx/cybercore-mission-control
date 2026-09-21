@@ -2,10 +2,15 @@
 
 ## Unreleased
 
+### Release candidate hardening
+
+- Version/build provenance output and cooperative Ctrl-C shutdown for periodic mode.
+- MIT license, release policy, package metadata, multi-platform CI, and tag-gated checksum artifacts.
+
 ### Added
 
 - P3-M001 Mission Control foundation scaffold.
-- P3-M002 experimental Rust `cybercore-agent` connector with one-shot and bounded periodic
+- P3-M002 Rust `cybercore-agent` connector with one-shot and bounded periodic
   heartbeat publishing.
 - Locked connector configuration, credential-source, HTTPS, payload, nonce, timestamp, and retry
   validation with loopback protocol fixtures.

@@ -18,6 +18,7 @@ Mission Control starts as a private, single-operator observation service.
 
 ## Current limitations
 
-P3-M002 does not yet implement key rotation, multi-user roles, rate limits, report uploads, or
-automated anomaly detection. Those require separate threat-modelled milestones. The connector is
-not release-ready and should use synthetic/local credentials until deployment hardening is complete.
+P3-M003 does not yet implement key rotation, multi-user roles, rate limits, report uploads, or
+automated anomaly detection. Those require separate threat-modelled milestones. The connector
+release candidate is still not a production control plane and should use synthetic/local
+credentials until deployment hardening is complete.
