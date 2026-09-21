@@ -1,0 +1,19 @@
+{
+  "name": "cybercore-mission-control",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Private Cybercore project, agent, heartbeat, and audit control plane.",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "check": "tsc --noEmit",
+    "deploy": "wrangler deploy",
+    "db:migrations:local": "wrangler d1 migrations apply MISSION_CONTROL_DB --local",
+    "db:migrations:remote": "wrangler d1 migrations apply MISSION_CONTROL_DB --remote"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260921.1",
+    "typescript": "^5.9.2",
+    "wrangler": "^4.135.0"
+  }
+}

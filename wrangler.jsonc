@@ -1,0 +1,40 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cybercore-mission-control",
+  "main": "src/worker.ts",
+  "compatibility_date": "2026-09-21",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application"
+  },
+  "d1_databases": [
+    {
+      "binding": "MISSION_CONTROL_DB",
+      "database_name": "cybercore-mission-control",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "PROJECT_EVENTS",
+        "class_name": "ProjectEventChannel"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["ProjectEventChannel"]
+    }
+  ],
+  "vars": {
+    "ENVIRONMENT": "local"
+  },
+  "observability": {
+    "enabled": true
+  }
+}
