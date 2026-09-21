@@ -3,4 +3,6 @@ node_modules/
 .dev.vars
 .env*
 dist/
+target/
+connector/config.json
 .DS_Store

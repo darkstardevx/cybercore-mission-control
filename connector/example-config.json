@@ -1,0 +1,14 @@
+{
+  "endpoint": "https://mission-control.example.invalid",
+  "agent_id": "agt_replace_me",
+  "status": "online",
+  "payload": {
+    "platform": "linux",
+    "connector": "cybercore-agent"
+  },
+  "credential_file": "/home/operator/.config/cybercore-agent/credential",
+  "timeout_secs": 10,
+  "interval_secs": 60,
+  "max_retries": 3,
+  "retry_delay_ms": 250
+}

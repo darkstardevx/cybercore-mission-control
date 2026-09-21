@@ -8,7 +8,8 @@ a Durable Object live-event channel, and a static dashboard.
 
 ## Status
 
-P3-M001 foundation — alpha, local/demo ready. This is not a production control plane yet.
+P3-M002 foundation + experimental Rust connector — alpha, local/demo ready. This is not a
+production control plane or release-ready agent package yet.
 
 ## Local development
 
@@ -28,6 +29,23 @@ ADMIN_TOKEN=replace-with-a-local-token
 ```
 
 Use that value as the `x-mission-control-admin` header. Never commit `.dev.vars`.
+
+## Experimental Rust connector
+
+The outbound-only `cybercore-agent` connector sends one bounded heartbeat at a time. It cannot
+receive commands, open a listener, edit local files, or change AgentForge state. Build and test it
+with:
+
+```sh
+cargo test --locked
+cargo run --locked -p cybercore-agent -- --config connector/example-config.json once
+```
+
+Before running it, copy the example configuration, set a real Mission Control endpoint and agent
+ID, and provide the one-time credential through either an environment variable or an owner-only
+credential file. Non-loopback endpoints must use HTTPS. The periodic `run` mode has bounded
+timeouts/retries and can be stopped with the normal process interrupt; no cloud response is treated
+as an instruction. See [connector setup](connector/README.md) and [the connector protocol](docs/CONNECTOR_PROTOCOL.md).
 
 ## API foundation
 

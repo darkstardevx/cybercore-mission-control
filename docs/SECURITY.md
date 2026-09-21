@@ -12,8 +12,12 @@ Mission Control starts as a private, single-operator observation service.
 - Sensitive system values are opt-in and should be redacted before upload.
 - The dashboard should be placed behind Cloudflare Access before any real data is used.
 - Production secrets are Wrangler secrets, never repository variables or committed files.
+- The experimental Rust connector accepts credentials only from an explicit environment variable
+  or owner-only credential file; it rejects unsafe Unix file permissions and never logs the value.
+- Connector redirects are disabled, non-loopback HTTP is rejected, and retry behavior is bounded.
 
 ## Current limitations
 
-P3-M001 does not yet implement key rotation, multi-user roles, rate limits, report uploads, or
-automated anomaly detection. Those require separate threat-modelled milestones.
+P3-M002 does not yet implement key rotation, multi-user roles, rate limits, report uploads, or
+automated anomaly detection. Those require separate threat-modelled milestones. The connector is
+not release-ready and should use synthetic/local credentials until deployment hardening is complete.
