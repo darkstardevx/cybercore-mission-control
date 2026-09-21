@@ -16,7 +16,7 @@ assert.throws(
 );
 
 assert.throws(
-  () => validatePreflight(config, { environment: "staging", allowProduction: false }),
+  () => validatePreflight(config, { environment: "production", allowProduction: true }),
   /database_id is still a placeholder/,
 );
 

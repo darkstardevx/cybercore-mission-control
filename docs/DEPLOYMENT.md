@@ -32,9 +32,9 @@ node scripts/preflight.mjs --environment staging
 node scripts/preflight.mjs --environment production --allow-production
 ```
 
-The committed staging and production database IDs are intentional placeholders. Replace them only
-in a private, reviewed deployment configuration or through the approved environment mechanism; do
-not commit account IDs, tokens, `.dev.vars`, or `.env` files.
+The staging database is provisioned as a dedicated non-production resource and its identifier is
+recorded in `wrangler.jsonc`. The production database remains an intentional placeholder until a
+separate production approval. Do not commit account IDs, tokens, `.dev.vars`, or `.env` files.
 
 ## Dry run
 
@@ -73,6 +73,30 @@ The focused protocol suite can run without a Worker process:
 ```sh
 npm run test:protocol
 ```
+
+## Staging security gate
+
+Before deploying the staging Worker or applying its first remote migration:
+
+1. Create a Cloudflare Access self-hosted application for the staging hostname. Require the
+   operator identity group and deny unauthenticated requests; do not expose the dashboard on an
+   unprotected `workers.dev` URL.
+2. Set the staging admin credential as a Wrangler secret from the operator terminal:
+
+   ```sh
+   npx wrangler secret put ADMIN_TOKEN --env staging
+   ```
+
+   Generate the value locally, store it in the operator's password manager, and never place it in
+   a repository, GitHub variable, command log, or chat transcript.
+3. Add Cloudflare rate limiting/WAF rules for `/api/agents/*/heartbeat` and `/api/*` administrative
+   routes. Start with a bounded per-IP threshold, monitor false positives, and keep the admin
+   routes stricter than heartbeat ingestion.
+4. Record the Access policy identifier, rate-limit rule identifiers, secret rotation owner, and
+   expiry/revocation procedure in the release evidence. Rotate the staging token after validation
+   if it was exposed to a temporary operator session.
+
+The dashboard must not receive real project data until these controls are confirmed.
 
 ## Deployment boundary
 

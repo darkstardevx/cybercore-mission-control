@@ -21,7 +21,8 @@ Mission Control starts as a private, single-operator observation service.
 P3-M004 adds fail-closed local/staging/production configuration preflight and a staging binding
 dry-run. The preflight never prints secret values and requires explicit approval markers before a
 non-local deployment path can proceed. A real deployment still requires Cloudflare Access, deliberate
-migration review, Wrangler-managed secrets, and an operator-recorded smoke check. See
+migration review, Wrangler-managed secrets, rate limiting for heartbeat and admin routes, and an
+operator-recorded smoke check. See
 [deployment readiness](DEPLOYMENT.md).
 
 The protocol suite and disposable smoke harness cover malformed JSON, bounded fields and payloads,

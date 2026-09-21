@@ -44,7 +44,7 @@
         {
           "binding": "MISSION_CONTROL_DB",
           "database_name": "cybercore-mission-control-staging",
-          "database_id": "REPLACE_WITH_STAGING_DATABASE_ID",
+          "database_id": "4a42bc28-31f4-4341-b765-d5d34c7c81fc",
           "migrations_dir": "migrations"
         }
       ],
