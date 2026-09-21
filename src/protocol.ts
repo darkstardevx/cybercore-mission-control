@@ -32,11 +32,16 @@ export type HeartbeatInput = {
 export class ProtocolError extends Error {
   constructor(
     message: string,
-    readonly status = 400,
-    readonly code = "invalid_request",
+    status = 400,
+    code = "invalid_request",
   ) {
     super(message);
+    this.status = status;
+    this.code = code;
   }
+
+  readonly status: number;
+  readonly code: string;
 }
 
 export function assertObject(value: unknown, label: string): Record<string, unknown> {
@@ -107,10 +112,14 @@ export function parseHeartbeat(value: unknown): HeartbeatInput {
   const payload = input.payload === undefined ? {} : assertObject(input.payload, "payload");
   const payloadBytes = new TextEncoder().encode(JSON.stringify(payload)).byteLength;
   if (payloadBytes > MAX_PAYLOAD_BYTES) throw new ProtocolError("heartbeat payload is too large", 413, "payload_too_large");
+  const status = input.status === undefined ? "online" : input.status;
+  if (status !== "online" && status !== "offline" && status !== "degraded") {
+    throw new ProtocolError("status must be online, offline, or degraded");
+  }
   return {
     nonce: requiredString(input.nonce, "nonce", 160),
     observed_at: new Date(timestamp).toISOString(),
-    status: input.status === undefined ? "online" : input.status as HeartbeatInput["status"],
+    status,
     payload: payload as Record<string, unknown>,
   };
 }

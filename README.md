@@ -81,6 +81,7 @@ Before any non-local operation, run the read-only environment preflight and stag
 ```sh
 npm run preflight
 npm run test:preflight
+npm run test:protocol
 npx wrangler deploy --env=staging --dry-run
 npm run smoke:local
 ```

@@ -48,6 +48,11 @@ The dry run must show the `PROJECT_EVENTS` Durable Object, the selected D1 bindi
 matching `ENVIRONMENT` variable. A dry run is not evidence that migrations or secrets are safe to
 apply; those remain explicit operator steps.
 
+For a reviewed, non-mutating staging check, manually dispatch the `Staging dry run` workflow and
+enter `STAGING_DRY_RUN`. The workflow is attached to the protected `staging` environment and only
+performs the same preflight, protocol tests, and Wrangler binding dry run. It has no production
+deployment step and never selects the `production` Wrangler environment.
+
 ## Disposable local smoke
 
 The end-to-end smoke command creates a temporary local D1/Worker state directory, applies migrations,
@@ -61,6 +66,12 @@ npm run smoke:local
 The smoke state is removed on exit and never contacts Cloudflare. Run it from a local operator
 terminal or a dedicated integration runner; the cross-platform CI job intentionally stops at the
 deterministic Wrangler binding dry run and does not own a long-lived local dev process.
+
+The focused protocol suite can run without a Worker process:
+
+```sh
+npm run test:protocol
+```
 
 ## Deployment boundary
 

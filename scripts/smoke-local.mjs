@@ -96,6 +96,7 @@ try {
 
   const unauthorized = await request(base, "/api/projects");
   assert.equal(unauthorized.response.status, 401);
+  assert.equal(unauthorized.body.code, "admin_required");
 
   const project = await request(base, "/api/projects", {
     method: "POST",
@@ -121,6 +122,61 @@ try {
   const agentId = registration.body.agent.id;
   const credential = registration.body.credential;
   assert.match(credential, /^mc_[a-z0-9]+$/);
+
+  const missingCredential = await request(base, `/api/agents/${agentId}/heartbeat`, {
+    method: "POST",
+    body: JSON.stringify({ nonce: "missing-credential", observed_at: new Date().toISOString() }),
+  });
+  assert.equal(missingCredential.response.status, 401);
+  assert.equal(missingCredential.body.code, "agent_required");
+
+  const malformed = await request(base, `/api/agents/${agentId}/heartbeat`, {
+    method: "POST",
+    headers: { authorization: `Bearer ${credential}` },
+    body: "not-json",
+  });
+  assert.equal(malformed.response.status, 400);
+  assert.equal(malformed.body.code, "invalid_request");
+
+  const stale = await request(base, `/api/agents/${agentId}/heartbeat`, {
+    method: "POST",
+    headers: { authorization: `Bearer ${credential}` },
+    body: JSON.stringify({ nonce: "stale", observed_at: new Date(Date.now() - 6 * 60 * 1000).toISOString() }),
+  });
+  assert.equal(stale.response.status, 400);
+  assert.equal(stale.body.code, "stale_heartbeat");
+
+  const future = await request(base, `/api/agents/${agentId}/heartbeat`, {
+    method: "POST",
+    headers: { authorization: `Bearer ${credential}` },
+    body: JSON.stringify({ nonce: "future", observed_at: new Date(Date.now() + 60 * 1000).toISOString() }),
+  });
+  assert.equal(future.response.status, 400);
+  assert.equal(future.body.code, "future_heartbeat");
+
+  const oversized = await request(base, `/api/agents/${agentId}/heartbeat`, {
+    method: "POST",
+    headers: { authorization: `Bearer ${credential}` },
+    body: JSON.stringify({ nonce: "oversized", observed_at: new Date().toISOString(), payload: { data: "x".repeat(17 * 1024) } }),
+  });
+  assert.equal(oversized.response.status, 413);
+  assert.equal(oversized.body.code, "payload_too_large");
+
+  const invalidStatus = await request(base, `/api/agents/${agentId}/heartbeat`, {
+    method: "POST",
+    headers: { authorization: `Bearer ${credential}` },
+    body: JSON.stringify({ nonce: "invalid-status", observed_at: new Date().toISOString(), status: "unknown" }),
+  });
+  assert.equal(invalidStatus.response.status, 400);
+  assert.equal(invalidStatus.body.code, "invalid_request");
+
+  const mismatch = await request(base, "/api/agents/not-this-agent/heartbeat", {
+    method: "POST",
+    headers: { authorization: `Bearer ${credential}` },
+    body: JSON.stringify({ nonce: "mismatch", observed_at: new Date().toISOString() }),
+  });
+  assert.equal(mismatch.response.status, 403);
+  assert.equal(mismatch.body.code, "agent_mismatch");
 
   const heartbeat = {
     nonce: `smoke-${Date.now()}`,
@@ -148,7 +204,7 @@ try {
   });
   assert.equal(audit.response.status, 200);
   assert.ok(audit.body.events.length >= 3);
-  console.log("local smoke passed: health, auth, migration, registration, heartbeat, replay rejection, audit");
+  console.log("local smoke passed: health, migration, auth failures, registration, heartbeat bounds, replay rejection, audit");
 } catch (error) {
   const message = error instanceof Error ? error.message : String(error);
   throw new Error(`${message}\nworker output:\n${worker?.output ?? "(unavailable)"}`);

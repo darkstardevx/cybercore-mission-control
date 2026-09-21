@@ -6,6 +6,9 @@
 
 - Added explicit local, staging, and production Wrangler environment boundaries.
 - Added read-only deployment preflight checks, regression tests, and staging binding dry-run CI.
+- Added focused protocol bounds/authentication tests, heartbeat status validation, and a disposable
+  smoke suite covering malformed, stale, future, oversized, replayed, and mismatched requests.
+- Added a manually confirmed, staging-only Wrangler dry-run workflow with no production deploy path.
 - Added deployment readiness, approval, access, secret, and rollback documentation.
 
 ### Release candidate hardening

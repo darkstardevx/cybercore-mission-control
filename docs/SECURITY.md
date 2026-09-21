@@ -24,6 +24,10 @@ non-local deployment path can proceed. A real deployment still requires Cloudfla
 migration review, Wrangler-managed secrets, and an operator-recorded smoke check. See
 [deployment readiness](DEPLOYMENT.md).
 
+The protocol suite and disposable smoke harness cover malformed JSON, bounded fields and payloads,
+invalid heartbeat status, stale/future timestamps, missing or mismatched credentials, and nonce
+replay. These checks remain observation-only; they do not create a command or control channel.
+
 ## Current limitations
 
 P3-M003 does not yet implement key rotation, multi-user roles, rate limits, report uploads, or
