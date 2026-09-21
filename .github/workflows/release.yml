@@ -130,6 +130,11 @@ jobs:
     needs: build
     runs-on: ubuntu-24.04
     steps:
+      - name: Check out exact release ref
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref_name }}
+          fetch-depth: 0
       - name: Download archives
         uses: actions/download-artifact@v5
         with:
