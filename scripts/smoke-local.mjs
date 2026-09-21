@@ -58,6 +58,20 @@ async function request(base, path, init = {}) {
   return { response, body };
 }
 
+async function openEvents(base, projectId) {
+  const socket = new WebSocket(`${base}/api/projects/${projectId}/events`, ["mc-admin.demo-admin"]);
+  await new Promise((resolvePromise, reject) => {
+    const timer = setTimeout(() => reject(new Error("event WebSocket open timeout")), 5_000);
+    socket.addEventListener("open", () => { clearTimeout(timer); resolvePromise(); }, { once: true });
+    socket.addEventListener("error", () => { clearTimeout(timer); reject(new Error("event WebSocket failed to open")); }, { once: true });
+  });
+  const event = new Promise((resolvePromise, reject) => {
+    const timer = setTimeout(() => reject(new Error("event WebSocket message timeout")), 5_000);
+    socket.addEventListener("message", (message) => { clearTimeout(timer); resolvePromise(JSON.parse(message.data)); }, { once: true });
+  });
+  return { socket, event };
+}
+
 async function stop(child) {
   if (child.exitCode !== null) return;
   child.kill("SIGTERM");
@@ -122,6 +136,7 @@ try {
   const agentId = registration.body.agent.id;
   const credential = registration.body.credential;
   assert.match(credential, /^mc_[a-z0-9]+$/);
+  const events = await openEvents(base, projectId);
 
   const missingCredential = await request(base, `/api/agents/${agentId}/heartbeat`, {
     method: "POST",
@@ -190,6 +205,9 @@ try {
     body: JSON.stringify(heartbeat),
   });
   assert.equal(accepted.response.status, 202);
+  const liveEvent = await events.event;
+  assert.equal(liveEvent.type, "agent.heartbeat");
+  events.socket.close();
 
   const replayed = await request(base, `/api/agents/${agentId}/heartbeat`, {
     method: "POST",
@@ -204,7 +222,7 @@ try {
   });
   assert.equal(audit.response.status, 200);
   assert.ok(audit.body.events.length >= 3);
-  console.log("local smoke passed: health, migration, auth failures, registration, heartbeat bounds, replay rejection, audit");
+  console.log("local smoke passed: health, migration, auth failures, registration, heartbeat bounds, live event, replay rejection, audit");
 } catch (error) {
   const message = error instanceof Error ? error.message : String(error);
   throw new Error(`${message}\nworker output:\n${worker?.output ?? "(unavailable)"}`);

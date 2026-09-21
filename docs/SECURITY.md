@@ -27,6 +27,8 @@ migration review, Wrangler-managed secrets, and an operator-recorded smoke check
 The protocol suite and disposable smoke harness cover malformed JSON, bounded fields and payloads,
 invalid heartbeat status, stale/future timestamps, missing or mismatched credentials, and nonce
 replay. These checks remain observation-only; they do not create a command or control channel.
+The live project event channel requires the same admin token through the `mc-admin.<token>`
+WebSocket subprotocol and never accepts client-to-server commands.
 
 ## Current limitations
 

@@ -58,6 +58,7 @@ deployment step and never selects the `production` Wrangler environment.
 The end-to-end smoke command creates a temporary local D1/Worker state directory, applies migrations,
 starts a loopback Worker, verifies admin and agent authentication, registers an agent, accepts one
 heartbeat, rejects its replayed nonce, confirms durable audit events, and shuts the Worker down.
+It also opens the authenticated project event channel and confirms a heartbeat is delivered live.
 
 ```sh
 npm run smoke:local

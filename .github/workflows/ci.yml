@@ -52,6 +52,6 @@ jobs:
       - name: Type-check Worker
         run: npm run check
       - name: Validate deployment preflight
-        run: npm run preflight && npm run test:preflight
+        run: npm run preflight && npm run test:preflight && npm run test:protocol
       - name: Validate staging bindings
         run: npx wrangler deploy --env=staging --dry-run --outdir /tmp/cybercore-mission-control-dry-run

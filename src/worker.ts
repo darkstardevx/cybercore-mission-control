@@ -40,7 +40,12 @@ export class ProjectEventChannel extends DurableObject<Env> {
       const [client, server] = Object.values(pair);
       this.ctx.acceptWebSocket(server);
       this.sockets.add(server);
-      return new Response(null, { status: 101, webSocket: client });
+      const protocol = request.headers.get("sec-websocket-protocol")?.split(",").map((value) => value.trim()).find((value) => value.startsWith("mc-admin."));
+      return new Response(null, {
+        status: 101,
+        webSocket: client,
+        headers: protocol ? { "sec-websocket-protocol": protocol } : undefined,
+      });
     }
     if (request.method === "POST") {
       const event = await request.json();
@@ -72,8 +77,9 @@ function requestId(request: Request): string {
 
 function adminAuthorized(request: Request, env: Env): boolean {
   const provided = request.headers.get("x-mission-control-admin");
+  const websocketProtocol = request.headers.get("sec-websocket-protocol")?.split(",").map((value) => value.trim()).find((value) => value.startsWith("mc-admin."));
   const expected = env.ADMIN_TOKEN || (env.ENVIRONMENT === "local" ? "demo-admin" : "");
-  return Boolean(expected && provided === expected);
+  return Boolean(expected && (provided === expected || websocketProtocol === `mc-admin.${expected}`));
 }
 
 function adminFailure(id: string): Response {
