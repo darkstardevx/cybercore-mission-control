@@ -21,10 +21,14 @@ function command(args, options = {}) {
     });
     let stdout = "";
     let stderr = "";
+    const timeout = setTimeout(() => child.kill("SIGTERM"), options.timeoutMs ?? 60_000);
     child.stdout?.on("data", (chunk) => { stdout += chunk; });
     child.stderr?.on("data", (chunk) => { stderr += chunk; });
     child.on("error", reject);
-    child.on("close", (code, signal) => resolvePromise({ code, signal, stdout, stderr }));
+    child.on("close", (code, signal) => {
+      clearTimeout(timeout);
+      resolvePromise({ code, signal, stdout, stderr });
+    });
   });
 }
 
@@ -34,7 +38,7 @@ async function waitForHealth(url, child) {
   while (Date.now() < deadline) {
     if (child.exitCode !== null) throw new Error(`local Worker exited before health check: ${lastError}`);
     try {
-      const response = await fetch(`${url}/api/health`);
+      const response = await fetch(`${url}/api/health`, { signal: AbortSignal.timeout(1_000) });
       if (response.ok) return;
       lastError = `health returned HTTP ${response.status}`;
     } catch (error) {
