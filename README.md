@@ -82,6 +82,7 @@ Before any non-local operation, run the read-only environment preflight and stag
 npm run preflight
 npm run test:preflight
 npx wrangler deploy --env=staging --dry-run
+npm run smoke:local
 ```
 
 The staging and production Wrangler environments intentionally contain database-ID placeholders.

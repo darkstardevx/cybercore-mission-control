@@ -48,6 +48,18 @@ The dry run must show the `PROJECT_EVENTS` Durable Object, the selected D1 bindi
 matching `ENVIRONMENT` variable. A dry run is not evidence that migrations or secrets are safe to
 apply; those remain explicit operator steps.
 
+## Disposable local smoke
+
+The end-to-end smoke command creates a temporary local D1/Worker state directory, applies migrations,
+starts a loopback Worker, verifies admin and agent authentication, registers an agent, accepts one
+heartbeat, rejects its replayed nonce, confirms durable audit events, and shuts the Worker down.
+
+```sh
+npm run smoke:local
+```
+
+The smoke state is removed on exit and never contacts Cloudflare.
+
 ## Deployment boundary
 
 This milestone does not deploy Cloudflare or create production credentials. Before a real staging
