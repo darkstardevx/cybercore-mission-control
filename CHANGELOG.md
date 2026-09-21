@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Production-readiness foundations
+
+- Added explicit local, staging, and production Wrangler environment boundaries.
+- Added read-only deployment preflight checks, regression tests, and staging binding dry-run CI.
+- Added deployment readiness, approval, access, secret, and rollback documentation.
+
 ### Release candidate hardening
 
 - Version/build provenance output and cooperative Ctrl-C shutdown for periodic mode.

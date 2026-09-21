@@ -76,8 +76,19 @@ npm run db:migrations:remote
 npm run deploy
 ```
 
-The initial dashboard should remain private behind Cloudflare Access. No production account IDs,
-credentials, or private reports belong in this repository.
+Before any non-local operation, run the read-only environment preflight and staging dry run:
+
+```sh
+npm run preflight
+npm run test:preflight
+npx wrangler deploy --env=staging --dry-run
+```
+
+The staging and production Wrangler environments intentionally contain database-ID placeholders.
+Production also requires explicit `--allow-production` acknowledgement. The full deployment
+boundary, required secret names, rollback procedure, and Cloudflare Access requirement are in
+[deployment readiness](docs/DEPLOYMENT.md). No production account IDs, credentials, or private
+reports belong in this repository.
 
 ## Boundaries
 
@@ -89,6 +100,7 @@ events are durable; live event delivery is a convenience view.
 - [Security boundary](docs/SECURITY.md)
 - [Connector protocol](docs/CONNECTOR_PROTOCOL.md)
 - [Release policy](docs/RELEASE.md)
+- [Deployment readiness](docs/DEPLOYMENT.md)
 - [Changelog](CHANGELOG.md)
 
 ## License

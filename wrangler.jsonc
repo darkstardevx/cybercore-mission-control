@@ -34,6 +34,64 @@
   "vars": {
     "ENVIRONMENT": "local"
   },
+  "env": {
+    "staging": {
+      "name": "cybercore-mission-control-staging",
+      "vars": {
+        "ENVIRONMENT": "staging"
+      },
+      "d1_databases": [
+        {
+          "binding": "MISSION_CONTROL_DB",
+          "database_name": "cybercore-mission-control-staging",
+          "database_id": "REPLACE_WITH_STAGING_DATABASE_ID",
+          "migrations_dir": "migrations"
+        }
+      ],
+      "durable_objects": {
+        "bindings": [
+          {
+            "name": "PROJECT_EVENTS",
+            "class_name": "ProjectEventChannel"
+          }
+        ]
+      },
+      "migrations": [
+        {
+          "tag": "v1",
+          "new_sqlite_classes": ["ProjectEventChannel"]
+        }
+      ]
+    },
+    "production": {
+      "name": "cybercore-mission-control-production",
+      "vars": {
+        "ENVIRONMENT": "production"
+      },
+      "d1_databases": [
+        {
+          "binding": "MISSION_CONTROL_DB",
+          "database_name": "cybercore-mission-control-production",
+          "database_id": "REPLACE_WITH_PRODUCTION_DATABASE_ID",
+          "migrations_dir": "migrations"
+        }
+      ],
+      "durable_objects": {
+        "bindings": [
+          {
+            "name": "PROJECT_EVENTS",
+            "class_name": "ProjectEventChannel"
+          }
+        ]
+      },
+      "migrations": [
+        {
+          "tag": "v1",
+          "new_sqlite_classes": ["ProjectEventChannel"]
+        }
+      ]
+    }
+  },
   "observability": {
     "enabled": true
   }

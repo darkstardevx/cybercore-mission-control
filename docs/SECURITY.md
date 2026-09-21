@@ -16,6 +16,14 @@ Mission Control starts as a private, single-operator observation service.
   or owner-only credential file; it rejects unsafe Unix file permissions and never logs the value.
 - Connector redirects are disabled, non-loopback HTTP is rejected, and retry behavior is bounded.
 
+## Deployment readiness
+
+P3-M004 adds fail-closed local/staging/production configuration preflight and a staging binding
+dry-run. The preflight never prints secret values and requires explicit approval markers before a
+non-local deployment path can proceed. A real deployment still requires Cloudflare Access, deliberate
+migration review, Wrangler-managed secrets, and an operator-recorded smoke check. See
+[deployment readiness](DEPLOYMENT.md).
+
 ## Current limitations
 
 P3-M003 does not yet implement key rotation, multi-user roles, rate limits, report uploads, or

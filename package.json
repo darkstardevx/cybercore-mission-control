@@ -7,6 +7,8 @@
   "scripts": {
     "dev": "wrangler dev",
     "check": "tsc --noEmit",
+    "preflight": "node scripts/preflight.mjs",
+    "test:preflight": "node scripts/preflight.test.mjs",
     "deploy": "wrangler deploy",
     "db:migrations:local": "wrangler d1 migrations apply MISSION_CONTROL_DB --local",
     "db:migrations:remote": "wrangler d1 migrations apply MISSION_CONTROL_DB --remote"
