@@ -21,14 +21,20 @@ npm run db:migrations:local
 npm run dev
 ```
 
-Open the URL Wrangler prints. The dashboard intentionally starts in demo mode. To use the API
-locally, set an admin token in `.dev.vars`:
+Open the URL Wrangler prints. The dashboard starts with a safe demo snapshot until an operator
+connects a token. Use the **operator token** field to load live projects, agent status, heartbeat
+counts, and durable audit events; the token is kept in browser local storage for that browser and
+can be cleared with **Disconnect**. To use the API locally, set an admin token in `.dev.vars`:
 
 ```text
 ADMIN_TOKEN=replace-with-a-local-token
 ```
 
 Use that value as the `x-mission-control-admin` header. Never commit `.dev.vars`.
+
+The deployed staging dashboard is protected by Cloudflare Access and still requires the Mission
+Control `ADMIN_TOKEN` to read operator data. Access authenticates the human; the application token
+authorizes the dashboard API. No token is bundled into the static assets.
 
 ## Experimental Rust connector
 

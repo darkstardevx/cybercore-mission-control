@@ -7,20 +7,95 @@
   <title>Mission Control // Cybercore</title>
   <style>
     :root{color-scheme:dark;--void:#071014;--panel:#0d1a20;--line:#1d3f49;--text:#e8fffa;--muted:#7d9ba1;--dim:#46656d;--cyan:#00f0b5;--blue:#00d9ff;--pink:#ff2bb5;--amber:#ffbf4a;font:14px ui-monospace,SFMono-Regular,Menlo,monospace}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 90% 0,#18223b,transparent 32%),var(--void);color:var(--text)}body:before{content:'';position:fixed;inset:0;z-index:-1;background:linear-gradient(rgba(0,240,181,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,240,181,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:linear-gradient(to bottom,#000,transparent)}a{color:inherit}.shell{width:min(1280px,calc(100% - 32px));margin:0 auto}.top{display:flex;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line)}.brand{font-weight:700;letter-spacing:.13em}.brand b{color:var(--cyan)}.brand small{display:block;margin-top:4px;color:var(--muted);font-size:10px;font-weight:400;letter-spacing:.09em}.status{color:var(--cyan);font-size:11px}.status:before{content:'●';margin-right:8px;font-size:8px}.hero{display:flex;align-items:end;justify-content:space-between;gap:30px;padding:55px 0 30px}.kicker{color:var(--pink);font-size:11px;letter-spacing:.14em}.hero h1{max-width:700px;margin:11px 0 16px;font-size:clamp(36px,6vw,70px);line-height:.98;letter-spacing:-.05em}.hero h1 span{color:var(--cyan)}.hero p{max-width:620px;color:var(--muted);line-height:1.7}.mode{padding:12px 15px;border:1px solid var(--line);color:var(--amber);white-space:nowrap;font-size:11px}.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}.panel{border:1px solid var(--line);background:rgba(13,26,32,.86);box-shadow:0 16px 45px rgba(0,0,0,.25)}.panel-head{display:flex;justify-content:space-between;padding:13px 15px;border-bottom:1px solid var(--line);color:var(--muted);font-size:11px}.panel-head b{color:var(--text);font-weight:500}.overview{padding:17px}.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{padding:16px;border:1px solid var(--line);background:#0a151a}.metric label{display:block;margin-bottom:9px;color:var(--dim);font-size:10px;text-transform:uppercase}.metric strong{font-size:25px;color:var(--cyan)}.metric small{display:block;margin-top:5px;color:var(--muted);font-size:10px}.agents{padding:0}.agent{display:flex;align-items:center;justify-content:space-between;padding:14px 15px;border-bottom:1px solid var(--line)}.agent:last-child{border-bottom:0}.agent-name{display:flex;align-items:center;gap:9px}.dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 9px var(--cyan)}.dot.offline{background:var(--dim);box-shadow:none}.agent small{display:block;margin-top:4px;color:var(--muted);font-size:10px}.agent time{color:var(--dim);font-size:10px}.audit{margin-top:14px}.event{display:grid;grid-template-columns:130px 1fr 85px;gap:12px;padding:13px 15px;border-bottom:1px solid var(--line);font-size:11px}.event:last-child{border-bottom:0}.event time{color:var(--dim)}.event b{font-weight:500;color:var(--cyan)}.event span{color:var(--muted);text-align:right}.footer{display:flex;justify-content:space-between;gap:15px;margin:27px 0 35px;color:var(--dim);font-size:10px}.footer a{color:var(--cyan)}.demo{color:var(--amber)}@media(max-width:850px){.hero{display:block}.mode{display:inline-block;margin-top:12px}.grid{grid-template-columns:1fr}.metric-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.shell{width:min(100% - 22px,1280px)}.metric-grid{grid-template-columns:1fr}.event{grid-template-columns:1fr;gap:4px}.event span{text-align:left}.footer{align-items:flex-start;flex-direction:column}}
+    .operator{display:flex;align-items:center;gap:8px}.operator input{width:min(250px,35vw);padding:9px 10px;border:1px solid var(--line);background:#091419;color:var(--text);font:inherit;font-size:11px}.operator button,.toolbar button{padding:9px 12px;border:1px solid var(--cyan);background:transparent;color:var(--cyan);font:inherit;font-size:10px;letter-spacing:.08em;cursor:pointer}.operator button:hover,.toolbar button:hover{background:rgba(0,240,181,.12)}.toolbar{display:flex;align-items:center;gap:12px;padding:12px 15px;margin:18px 0 14px}.toolbar label{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:10px;letter-spacing:.08em}.toolbar select{min-width:260px;padding:8px 10px;border:1px solid var(--line);background:#091419;color:var(--text);font:inherit;font-size:11px}.toolbar select:disabled{opacity:.6}.toolbar .message{margin-left:auto;color:var(--muted);font-size:10px}.toolbar .message.error{color:#ff718d}.empty{padding:24px 15px;color:var(--muted);font-size:11px}.mission{max-width:620px;margin-top:8px;color:var(--dim);font-size:11px}.status.warn{color:var(--amber)}@media(max-width:650px){.top{align-items:flex-start;gap:15px;flex-direction:column}.operator{width:100%}.operator input{flex:1;width:auto}.toolbar{align-items:flex-start;flex-direction:column}.toolbar .message{margin-left:0}.toolbar select{width:100%}}
   </style>
 </head>
 <body>
   <div class="shell">
-    <header class="top"><div class="brand">CYBER<span>CORE</span><small>MISSION CONTROL // OBSERVATION PLANE</small></div><div class="status" id="service-status">LOCAL DEMO</div></header>
-    <section class="hero"><div><div class="kicker">// PROJECT OVERVIEW</div><h1>See every signal.<br><span>Keep authority local.</span></h1><p>Mission Control is the durable observation plane for Cybercore projects. It records agents, heartbeats, runs, and audit events without turning local execution into a cloud dependency.</p></div><div class="mode">MODE: <span class="demo" id="mode-label">DEMO DATA</span></div></section>
+    <header class="top"><div class="brand">CYBER<span>CORE</span><small>MISSION CONTROL // OBSERVATION PLANE</small></div><div class="operator"><input id="admin-token" type="password" autocomplete="off" placeholder="operator token"><button id="connect-button" type="button">CONNECT</button><button id="disconnect-button" type="button" hidden>DISCONNECT</button></div><div class="status" id="service-status">LOCAL DEMO</div></header>
+    <section class="hero"><div><div class="kicker">// PROJECT OVERVIEW</div><h1>See every signal.<br><span>Keep authority local.</span></h1><p>Mission Control is the durable observation plane for Cybercore projects. It records agents, heartbeats, runs, and audit events without turning local execution into a cloud dependency.</p><p class="mission" id="project-mission"></p></div><div class="mode">MODE: <span class="demo" id="mode-label">DEMO DATA</span></div></section>
+    <section class="panel toolbar"><label for="project-select">PROJECT <select id="project-select" disabled><option>No live project connected</option></select></label><button id="refresh-button" type="button">REFRESH</button><span class="message" id="data-message">Enter an operator token to load live state.</span></section>
     <main class="grid">
-      <section class="panel"><div class="panel-head"><b>PROJECT / CYBERCORE</b><span>updated just now</span></div><div class="overview"><div class="metric-grid"><div class="metric"><label>agents online</label><strong id="online-count">2</strong><small>of 3 registered</small></div><div class="metric"><label>heartbeats</label><strong id="heartbeat-count">184</strong><small>last 24 hours</small></div><div class="metric"><label>audit events</label><strong id="audit-count">42</strong><small>durable records</small></div></div><div class="panel audit"><div class="panel-head"><b>RECENT AUDIT</b><span>durable first</span></div><div id="events"><div class="event"><time>09:41:22Z</time><b>agent.heartbeat</b><span>cyberdeck-local</span></div><div class="event"><time>09:38:07Z</time><b>project.created</b><span>operator</span></div><div class="event"><time>09:31:44Z</time><b>agent.registered</b><span>operator</span></div></div></div></div></section>
-      <aside class="panel agents"><div class="panel-head"><b>REGISTERED AGENTS</b><span>3 total</span></div><div class="agent"><div class="agent-name"><i class="dot"></i><div>cyberdeck-local<small>Linux · connector 0.1.0</small></div></div><time>12s ago</time></div><div class="agent"><div class="agent-name"><i class="dot"></i><div>agentforge-dev<small>Linux · connector 0.1.0</small></div></div><time>48s ago</time></div><div class="agent"><div class="agent-name"><i class="dot offline"></i><div>cyberterm-lab<small>Linux · last seen 2h ago</small></div></div><time>offline</time></div></aside>
+      <section class="panel"><div class="panel-head"><b id="project-title">PROJECT / CYBERCORE</b><span id="project-updated">demo snapshot</span></div><div class="overview"><div class="metric-grid"><div class="metric"><label>agents online</label><strong id="online-count">2</strong><small id="agent-count-note">of 3 registered</small></div><div class="metric"><label>heartbeats</label><strong id="heartbeat-count">184</strong><small id="heartbeat-note">demo snapshot</small></div><div class="metric"><label>audit events</label><strong id="audit-count">42</strong><small id="audit-note">durable records</small></div></div><div class="panel audit"><div class="panel-head"><b>RECENT AUDIT</b><span id="audit-mode">durable first</span></div><div id="events"><div class="event"><time>09:41:22Z</time><b>agent.heartbeat</b><span>cyberdeck-local</span></div><div class="event"><time>09:38:07Z</time><b>project.created</b><span>operator</span></div><div class="event"><time>09:31:44Z</time><b>agent.registered</b><span>operator</span></div></div></div></div></section>
+      <aside class="panel agents"><div class="panel-head"><b>REGISTERED AGENTS</b><span id="agent-total">3 total</span></div><div id="agent-list"><div class="agent"><div class="agent-name"><i class="dot"></i><div>cyberdeck-local<small>Linux · connector 0.1.0</small></div></div><time>12s ago</time></div><div class="agent"><div class="agent-name"><i class="dot"></i><div>agentforge-dev<small>Linux · connector 0.1.0</small></div></div><time>48s ago</time></div><div class="agent"><div class="agent-name"><i class="dot offline"></i><div>cyberterm-lab<small>Linux · last seen 2h ago</small></div></div><time>offline</time></div></div></aside>
     </main>
     <footer class="footer"><span>private foundation // P3-M001</span><span><a href="https://github.com/darkstardevx/cybercore-mission-control">source ↗</a> · D1 + Durable Objects</span></footer>
   </div>
   <script>
-    (async function(){const token=localStorage.getItem('mcAdminToken');if(!token)return;try{const res=await fetch('/api/projects',{headers:{'x-mission-control-admin':token}});if(!res.ok)return;const data=await res.json();document.getElementById('mode-label').textContent='LIVE DATA';document.getElementById('service-status').textContent='API CONNECTED';if(data.projects?.[0]){document.querySelector('.panel-head span').textContent=data.projects[0].name;}}catch(_error){}}());
+    (() => {
+      const state = { token: localStorage.getItem('mcAdminToken') || '', projects: [], projectId: '' };
+      const $ = (id) => document.getElementById(id);
+      const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
+      const formatTime = (value) => { const date = new Date(value); return Number.isNaN(date.valueOf()) ? '—' : date.toISOString().slice(11, 19) + 'Z'; };
+      const setMessage = (message, error = false) => { $('data-message').textContent = message; $('data-message').classList.toggle('error', error); };
+      const headers = () => ({ 'x-mission-control-admin': state.token });
+      async function api(path, options = {}) {
+        const response = await fetch(path, { ...options, headers: { ...headers(), ...(options.headers || {}) } });
+        if (!response.ok) throw new Error(response.status === 401 ? 'operator token rejected' : `request failed (${response.status})`);
+        return response.json();
+      }
+      function renderAgents(agents) {
+        $('agent-total').textContent = `${agents.length} total`;
+        $('agent-count-note').textContent = `of ${agents.length} registered`;
+        $('online-count').textContent = agents.filter((agent) => agent.status === 'online').length;
+        $('agent-list').innerHTML = agents.length ? agents.map((agent) => {
+          const online = agent.status === 'online';
+          const seen = agent.last_seen_at ? formatTime(agent.last_seen_at) : 'never';
+          return `<div class="agent"><div class="agent-name"><i class="dot${online ? '' : ' offline'}"></i><div>${escapeHtml(agent.machine_name || agent.name)}<small>${escapeHtml(agent.platform || 'unknown')} · connector ${escapeHtml(agent.connector_version || 'unknown')}</small></div></div><time>${online ? seen : 'offline'}</time></div>`;
+        }).join('') : '<div class="empty">No agents registered for this project.</div>';
+      }
+      function renderAudit(events) {
+        const heartbeatCount = events.filter((event) => event.event_type === 'agent.heartbeat').length;
+        $('heartbeat-count').textContent = heartbeatCount;
+        $('heartbeat-note').textContent = 'returned audit window';
+        $('audit-count').textContent = events.length;
+        $('audit-note').textContent = 'durable records returned';
+        $('events').innerHTML = events.length ? events.slice(0, 12).map((event) => `<div class="event"><time>${formatTime(event.occurred_at)}</time><b>${escapeHtml(event.event_type)}</b><span>${escapeHtml(event.actor)}</span></div>`).join('') : '<div class="empty">No audit events recorded yet.</div>';
+      }
+      async function loadProject(projectId) {
+        if (!projectId) return;
+        const project = state.projects.find((entry) => entry.id === projectId);
+        const [agents, audit] = await Promise.all([api(`/api/projects/${encodeURIComponent(projectId)}/agents`), api(`/api/projects/${encodeURIComponent(projectId)}/audit?limit=100`)]);
+        $('project-title').textContent = `PROJECT / ${project.name}`;
+        $('project-mission').textContent = project.mission || '';
+        $('project-updated').textContent = `updated ${new Date().toISOString().slice(11, 19)}Z`;
+        $('audit-mode').textContent = 'live durable state';
+        renderAgents(agents.agents || []);
+        renderAudit(audit.events || []);
+      }
+      async function connect() {
+        state.token = $('admin-token').value.trim();
+        if (!state.token) { setMessage('Enter the operator token to connect.', true); return; }
+        localStorage.setItem('mcAdminToken', state.token);
+        try {
+          const data = await api('/api/projects');
+          state.projects = data.projects || [];
+          $('project-select').innerHTML = state.projects.length ? state.projects.map((project) => `<option value="${escapeHtml(project.id)}">${escapeHtml(project.name)}</option>`).join('') : '<option value="">No projects yet</option>';
+          $('project-select').disabled = !state.projects.length;
+          $('disconnect-button').hidden = false;
+          $('mode-label').textContent = 'LIVE DATA';
+          $('mode-label').classList.remove('demo');
+          $('service-status').textContent = 'API CONNECTED';
+          $('service-status').classList.remove('warn');
+          if (!state.projects.length) { setMessage('Connected. Create a project through the API to begin.'); return; }
+          state.projectId = state.projects[0].id;
+          $('project-select').value = state.projectId;
+          await loadProject(state.projectId);
+          setMessage(`${state.projects.length} project${state.projects.length === 1 ? '' : 's'} connected.`);
+        } catch (error) {
+          $('service-status').textContent = 'AUTH REQUIRED';
+          $('service-status').classList.add('warn');
+          setMessage(error instanceof Error ? error.message : 'connection failed', true);
+        }
+      }
+      function disconnect() { localStorage.removeItem('mcAdminToken'); window.location.reload(); }
+      $('connect-button').addEventListener('click', connect);
+      $('disconnect-button').addEventListener('click', disconnect);
+      $('refresh-button').addEventListener('click', () => state.token ? connect() : setMessage('Connect an operator token first.', true));
+      $('project-select').addEventListener('change', async (event) => { state.projectId = event.target.value; try { await loadProject(state.projectId); setMessage('Project state refreshed.'); } catch (error) { setMessage(error instanceof Error ? error.message : 'project load failed', true); } });
+      $('admin-token').addEventListener('keydown', (event) => { if (event.key === 'Enter') connect(); });
+      if (state.token) { $('admin-token').value = state.token; connect(); }
+    })();
   </script>
 </body>
 </html>
