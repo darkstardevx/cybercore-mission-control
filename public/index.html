@@ -9,6 +9,7 @@
     :root{color-scheme:dark;--void:#071014;--panel:#0d1a20;--line:#1d3f49;--text:#e8fffa;--muted:#7d9ba1;--dim:#46656d;--cyan:#00f0b5;--blue:#00d9ff;--pink:#ff2bb5;--amber:#ffbf4a;font:14px ui-monospace,SFMono-Regular,Menlo,monospace}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 90% 0,#18223b,transparent 32%),var(--void);color:var(--text)}body:before{content:'';position:fixed;inset:0;z-index:-1;background:linear-gradient(rgba(0,240,181,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,240,181,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:linear-gradient(to bottom,#000,transparent)}a{color:inherit}.shell{width:min(1280px,calc(100% - 32px));margin:0 auto}.top{display:flex;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line)}.brand{font-weight:700;letter-spacing:.13em}.brand b{color:var(--cyan)}.brand small{display:block;margin-top:4px;color:var(--muted);font-size:10px;font-weight:400;letter-spacing:.09em}.status{color:var(--cyan);font-size:11px}.status:before{content:'●';margin-right:8px;font-size:8px}.hero{display:flex;align-items:end;justify-content:space-between;gap:30px;padding:55px 0 30px}.kicker{color:var(--pink);font-size:11px;letter-spacing:.14em}.hero h1{max-width:700px;margin:11px 0 16px;font-size:clamp(36px,6vw,70px);line-height:.98;letter-spacing:-.05em}.hero h1 span{color:var(--cyan)}.hero p{max-width:620px;color:var(--muted);line-height:1.7}.mode{padding:12px 15px;border:1px solid var(--line);color:var(--amber);white-space:nowrap;font-size:11px}.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}.panel{border:1px solid var(--line);background:rgba(13,26,32,.86);box-shadow:0 16px 45px rgba(0,0,0,.25)}.panel-head{display:flex;justify-content:space-between;padding:13px 15px;border-bottom:1px solid var(--line);color:var(--muted);font-size:11px}.panel-head b{color:var(--text);font-weight:500}.overview{padding:17px}.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{padding:16px;border:1px solid var(--line);background:#0a151a}.metric label{display:block;margin-bottom:9px;color:var(--dim);font-size:10px;text-transform:uppercase}.metric strong{font-size:25px;color:var(--cyan)}.metric small{display:block;margin-top:5px;color:var(--muted);font-size:10px}.agents{padding:0}.agent{display:flex;align-items:center;justify-content:space-between;padding:14px 15px;border-bottom:1px solid var(--line)}.agent:last-child{border-bottom:0}.agent-name{display:flex;align-items:center;gap:9px}.dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 9px var(--cyan)}.dot.offline{background:var(--dim);box-shadow:none}.agent small{display:block;margin-top:4px;color:var(--muted);font-size:10px}.agent time{color:var(--dim);font-size:10px}.audit{margin-top:14px}.event{display:grid;grid-template-columns:130px 1fr 85px;gap:12px;padding:13px 15px;border-bottom:1px solid var(--line);font-size:11px}.event:last-child{border-bottom:0}.event time{color:var(--dim)}.event b{font-weight:500;color:var(--cyan)}.event span{color:var(--muted);text-align:right}.footer{display:flex;justify-content:space-between;gap:15px;margin:27px 0 35px;color:var(--dim);font-size:10px}.footer a{color:var(--cyan)}.demo{color:var(--amber)}@media(max-width:850px){.hero{display:block}.mode{display:inline-block;margin-top:12px}.grid{grid-template-columns:1fr}.metric-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.shell{width:min(100% - 22px,1280px)}.metric-grid{grid-template-columns:1fr}.event{grid-template-columns:1fr;gap:4px}.event span{text-align:left}.footer{align-items:flex-start;flex-direction:column}}
     .operator{display:flex;align-items:center;gap:8px}.operator input{width:min(250px,35vw);padding:9px 10px;border:1px solid var(--line);background:#091419;color:var(--text);font:inherit;font-size:11px}.operator button,.toolbar button{padding:9px 12px;border:1px solid var(--cyan);background:transparent;color:var(--cyan);font:inherit;font-size:10px;letter-spacing:.08em;cursor:pointer}.operator button:hover,.toolbar button:hover{background:rgba(0,240,181,.12)}.toolbar{display:flex;align-items:center;gap:12px;padding:12px 15px;margin:18px 0 14px}.toolbar label{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:10px;letter-spacing:.08em}.toolbar select{min-width:260px;padding:8px 10px;border:1px solid var(--line);background:#091419;color:var(--text);font:inherit;font-size:11px}.toolbar select:disabled{opacity:.6}.toolbar .message{margin-left:auto;color:var(--muted);font-size:10px}.toolbar .message.error{color:#ff718d}.empty{padding:24px 15px;color:var(--muted);font-size:11px}.mission{max-width:620px;margin-top:8px;color:var(--dim);font-size:11px}.status.warn{color:var(--amber)}@media(max-width:650px){.top{align-items:flex-start;gap:15px;flex-direction:column}.operator{width:100%}.operator input{flex:1;width:auto}.toolbar{align-items:flex-start;flex-direction:column}.toolbar .message{margin-left:0}.toolbar select{width:100%}}
     .bootstrap{padding:17px;margin:0 0 14px}.bootstrap form{display:grid;grid-template-columns:1fr 1.5fr auto;gap:10px;align-items:end}.bootstrap label{display:block;color:var(--muted);font-size:10px;letter-spacing:.08em}.bootstrap input,.bootstrap textarea{display:block;width:100%;margin-top:7px;padding:9px 10px;border:1px solid var(--line);background:#091419;color:var(--text);font:inherit;font-size:11px}.bootstrap textarea{min-height:38px;resize:vertical}.bootstrap button{padding:10px 14px;border:1px solid var(--cyan);background:var(--cyan);color:#041114;font:inherit;font-size:10px;letter-spacing:.08em;cursor:pointer}.bootstrap button:hover{filter:brightness(1.1)}@media(max-width:650px){.bootstrap form{grid-template-columns:1fr}.bootstrap button{width:100%}}
+    .activity-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.activity-grid .audit{margin-top:0}.stream-meta{display:flex;align-items:center;gap:10px}.stream-status{font-size:9px;letter-spacing:.06em}.stream-status.connected{color:var(--cyan)}.stream-status.reconnecting{color:var(--amber)}.stream-status.disconnected{color:var(--dim)}.stream-last{color:var(--dim);font-size:10px}.live-event b{color:var(--blue)}@media(max-width:850px){.activity-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -18,25 +19,107 @@
     <section class="panel toolbar"><label for="project-select">PROJECT <select id="project-select" disabled><option>No live project connected</option></select></label><button id="refresh-button" type="button">REFRESH</button><button id="new-project-button" type="button">NEW PROJECT</button><span class="message" id="data-message">Enter an operator token to load live state.</span></section>
     <section class="panel bootstrap" id="bootstrap-panel" hidden><div class="panel-head"><b>BOOTSTRAP PROJECT</b><span>operator action</span></div><form id="project-form"><label>NAME<input id="project-name" required maxlength="120" placeholder="e.g. Cybercore Core"></label><label>MISSION<textarea id="project-mission-input" maxlength="500" placeholder="What should this project accomplish?"></textarea></label><button type="submit">CREATE PROJECT</button></form></section>
     <main class="grid">
-      <section class="panel"><div class="panel-head"><b id="project-title">PROJECT / CYBERCORE</b><span id="project-updated">demo snapshot</span></div><div class="overview"><div class="metric-grid"><div class="metric"><label>agents online</label><strong id="online-count">2</strong><small id="agent-count-note">of 3 registered</small></div><div class="metric"><label>heartbeats</label><strong id="heartbeat-count">184</strong><small id="heartbeat-note">demo snapshot</small></div><div class="metric"><label>audit events</label><strong id="audit-count">42</strong><small id="audit-note">durable records</small></div></div><div class="panel audit"><div class="panel-head"><b>RECENT AUDIT</b><span id="audit-mode">durable first</span></div><div id="events"><div class="event"><time>09:41:22Z</time><b>agent.heartbeat</b><span>cyberdeck-local</span></div><div class="event"><time>09:38:07Z</time><b>project.created</b><span>operator</span></div><div class="event"><time>09:31:44Z</time><b>agent.registered</b><span>operator</span></div></div></div></div></section>
+      <section class="panel"><div class="panel-head"><b id="project-title">PROJECT / CYBERCORE</b><span id="project-updated">demo snapshot</span></div><div class="overview"><div class="metric-grid"><div class="metric"><label>agents online</label><strong id="online-count">2</strong><small id="agent-count-note">of 3 registered</small></div><div class="metric"><label>heartbeats</label><strong id="heartbeat-count">184</strong><small id="heartbeat-note">demo snapshot</small></div><div class="metric"><label>audit events</label><strong id="audit-count">42</strong><small id="audit-note">durable records</small></div></div><div class="activity-grid"><div class="panel audit"><div class="panel-head"><b>RECENT AUDIT</b><span id="audit-mode">durable first</span></div><div id="events"><div class="event"><time>09:41:22Z</time><b>agent.heartbeat</b><span>cyberdeck-local</span></div><div class="event"><time>09:38:07Z</time><b>project.created</b><span>operator</span></div><div class="event"><time>09:31:44Z</time><b>agent.registered</b><span>operator</span></div></div></div><div class="panel audit live-event"><div class="panel-head"><b>LIVE ACTIVITY</b><span class="stream-meta"><i class="stream-status disconnected" id="stream-status">STREAM DISCONNECTED</i><span class="stream-last" id="stream-last-event">no events yet</span></span></div><div id="live-events"><div class="empty">Connect to observe live agent events.</div></div></div></div></div></section>
       <aside class="panel agents"><div class="panel-head"><b>REGISTERED AGENTS</b><span id="agent-total">3 total</span></div><div id="agent-list"><div class="agent"><div class="agent-name"><i class="dot"></i><div>cyberdeck-local<small>Linux · connector 0.1.0</small></div></div><time>12s ago</time></div><div class="agent"><div class="agent-name"><i class="dot"></i><div>agentforge-dev<small>Linux · connector 0.1.0</small></div></div><time>48s ago</time></div><div class="agent"><div class="agent-name"><i class="dot offline"></i><div>cyberterm-lab<small>Linux · last seen 2h ago</small></div></div><time>offline</time></div></div></aside>
     </main>
     <footer class="footer"><span>private foundation // P3-M001</span><span><a href="https://github.com/darkstardevx/cybercore-mission-control">source ↗</a> · D1 + Durable Objects</span></footer>
   </div>
   <script>
     (() => {
-      const state = { token: localStorage.getItem('mcAdminToken') || '', projects: [], projectId: '' };
+      const state = { token: localStorage.getItem('mcAdminToken') || '', projects: [], projectId: '', agents: [], liveEvents: [], socket: null, streamGeneration: 0, reconnectTimer: null, reconnectAttempt: 0 };
+      const LIVE_EVENT_LIMIT = 12;
       const $ = (id) => document.getElementById(id);
       const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
       const formatTime = (value) => { const date = new Date(value); return Number.isNaN(date.valueOf()) ? '—' : date.toISOString().slice(11, 19) + 'Z'; };
       const setMessage = (message, error = false) => { $('data-message').textContent = message; $('data-message').classList.toggle('error', error); };
       const headers = () => ({ 'x-mission-control-admin': state.token });
+      function setStreamStatus(status, detail = '') {
+        const labels = { connected: 'STREAM CONNECTED', reconnecting: 'STREAM RECONNECTING', disconnected: 'STREAM DISCONNECTED' };
+        const element = $('stream-status');
+        element.textContent = labels[status] || labels.disconnected;
+        element.className = `stream-status ${status}`;
+        if (detail) element.title = detail; else element.removeAttribute('title');
+      }
+      function renderLiveEvents(events) {
+        $('live-events').innerHTML = events.length ? events.map((event) => {
+          const agent = state.agents.find((candidate) => candidate.id === event.resource_id || candidate.machine_id === event.payload?.machine_id);
+          const actor = agent ? (agent.machine_name || agent.name) : event.actor || 'system';
+          const status = event.payload?.status ? ` · ${event.payload.status}` : '';
+          return `<div class="event"><time>${formatTime(event.occurred_at)}</time><b>${escapeHtml(event.type || 'event')}</b><span>${escapeHtml(`${actor}${status}`)}</span></div>`;
+        }).join('') : '<div class="empty">Waiting for live agent events.</div>';
+      }
+      function handleStreamEvent(event) {
+        if (!event || typeof event !== 'object') return;
+        const payload = event.payload && typeof event.payload === 'object' ? event.payload : {};
+        const agent = state.agents.find((candidate) => candidate.id === event.resource_id || candidate.machine_id === payload.machine_id);
+        if (event.type === 'agent.heartbeat' && agent) {
+          agent.status = payload.status || 'online';
+          agent.last_seen_at = event.occurred_at || new Date().toISOString();
+          renderAgents(state.agents);
+          $('heartbeat-count').textContent = String(Number($('heartbeat-count').textContent || 0) + 1);
+          $('heartbeat-note').textContent = 'including live events';
+        }
+        state.liveEvents = [{ ...event, payload }, ...state.liveEvents].slice(0, LIVE_EVENT_LIMIT);
+        renderLiveEvents(state.liveEvents);
+        $('stream-last-event').textContent = `last ${formatTime(event.occurred_at)}`;
+      }
+      function closeStream() {
+        state.streamGeneration += 1;
+        if (state.reconnectTimer) { clearTimeout(state.reconnectTimer); state.reconnectTimer = null; }
+        if (state.socket) { const socket = state.socket; state.socket = null; socket.close(); }
+        state.reconnectAttempt = 0;
+        setStreamStatus('disconnected');
+      }
+      function scheduleStreamReconnect(projectId, generation) {
+        if (generation !== state.streamGeneration || projectId !== state.projectId || !state.token) return;
+        const delay = Math.min(30_000, 1_000 * (2 ** Math.min(state.reconnectAttempt, 5)));
+        state.reconnectAttempt += 1;
+        setStreamStatus('reconnecting', `retrying in ${Math.ceil(delay / 1000)}s`);
+        state.reconnectTimer = setTimeout(() => { state.reconnectTimer = null; openStream(projectId, generation); }, delay);
+      }
+      function openStream(projectId, generation) {
+        if (generation !== state.streamGeneration || projectId !== state.projectId || !state.token) return;
+        setStreamStatus('reconnecting');
+        let socket;
+        try {
+          socket = new WebSocket(`${window.location.origin}/api/projects/${encodeURIComponent(projectId)}/events`, `mc-admin.${state.token}`);
+        } catch (error) {
+          scheduleStreamReconnect(projectId, generation);
+          return;
+        }
+        state.socket = socket;
+        socket.addEventListener('open', () => {
+          if (generation !== state.streamGeneration || socket !== state.socket) return;
+          state.reconnectAttempt = 0;
+          setStreamStatus('connected');
+        });
+        socket.addEventListener('message', (message) => {
+          if (generation !== state.streamGeneration || socket !== state.socket) return;
+          try { handleStreamEvent(JSON.parse(message.data)); } catch { setStreamStatus('reconnecting', 'received invalid event data'); }
+        });
+        socket.addEventListener('error', () => {
+          if (generation === state.streamGeneration && socket === state.socket) setStreamStatus('reconnecting', 'stream error');
+        });
+        socket.addEventListener('close', () => {
+          if (generation !== state.streamGeneration || socket !== state.socket) return;
+          state.socket = null;
+          scheduleStreamReconnect(projectId, generation);
+        });
+      }
+      function connectStream(projectId) {
+        closeStream();
+        state.liveEvents = [];
+        renderLiveEvents(state.liveEvents);
+        $('stream-last-event').textContent = 'no events yet';
+        openStream(projectId, state.streamGeneration);
+      }
       async function api(path, options = {}) {
         const response = await fetch(path, { ...options, headers: { ...headers(), ...(options.headers || {}) } });
         if (!response.ok) throw new Error(response.status === 401 ? 'operator token rejected' : `request failed (${response.status})`);
         return response.json();
       }
       function renderAgents(agents) {
+        state.agents = agents;
         $('agent-total').textContent = `${agents.length} total`;
         $('agent-count-note').textContent = `of ${agents.length} registered`;
         $('online-count').textContent = agents.filter((agent) => agent.status === 'online').length;
@@ -64,8 +147,12 @@
         $('audit-mode').textContent = 'live durable state';
         renderAgents(agents.agents || []);
         renderAudit(audit.events || []);
+        state.liveEvents = [];
+        renderLiveEvents(state.liveEvents);
+        $('stream-last-event').textContent = 'no events yet';
       }
       async function connect() {
+        closeStream();
         state.token = $('admin-token').value.trim();
         if (!state.token) { setMessage('Enter the operator token to connect.', true); return; }
         localStorage.setItem('mcAdminToken', state.token);
@@ -80,10 +167,11 @@
           $('service-status').textContent = 'API CONNECTED';
           $('service-status').classList.remove('warn');
           $('bootstrap-panel').hidden = state.projects.length > 0;
-          if (!state.projects.length) { setMessage('Connected. Create your first project below.'); return; }
+          if (!state.projects.length) { state.projectId = ''; setMessage('Connected. Create your first project below.'); return; }
           state.projectId = state.projects[0].id;
           $('project-select').value = state.projectId;
           await loadProject(state.projectId);
+          connectStream(state.projectId);
           setMessage(`${state.projects.length} project${state.projects.length === 1 ? '' : 's'} connected.`);
         } catch (error) {
           $('service-status').textContent = 'AUTH REQUIRED';
@@ -91,12 +179,12 @@
           setMessage(error instanceof Error ? error.message : 'connection failed', true);
         }
       }
-      function disconnect() { localStorage.removeItem('mcAdminToken'); window.location.reload(); }
+      function disconnect() { closeStream(); localStorage.removeItem('mcAdminToken'); window.location.reload(); }
       $('connect-button').addEventListener('click', connect);
       $('disconnect-button').addEventListener('click', disconnect);
       $('refresh-button').addEventListener('click', () => state.token ? connect() : setMessage('Connect an operator token first.', true));
       $('new-project-button').addEventListener('click', () => { $('bootstrap-panel').hidden = false; $('project-name').focus(); });
-      $('project-select').addEventListener('change', async (event) => { state.projectId = event.target.value; try { await loadProject(state.projectId); setMessage('Project state refreshed.'); } catch (error) { setMessage(error instanceof Error ? error.message : 'project load failed', true); } });
+      $('project-select').addEventListener('change', async (event) => { closeStream(); state.projectId = event.target.value; try { await loadProject(state.projectId); connectStream(state.projectId); setMessage('Project state refreshed.'); } catch (error) { setMessage(error instanceof Error ? error.message : 'project load failed', true); } });
       $('admin-token').addEventListener('keydown', (event) => { if (event.key === 'Enter') connect(); });
       $('project-form').addEventListener('submit', async (event) => {
         event.preventDefault();
