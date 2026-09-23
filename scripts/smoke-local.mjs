@@ -15,7 +15,7 @@ function command(args, options = {}) {
   return new Promise((resolvePromise, reject) => {
     const child = spawn(npx, ["wrangler", ...args], {
       cwd: ROOT,
-      env: { ...process.env, WRANGLER_LOG_PATH: "none" },
+      env: { ...process.env },
       stdio: ["ignore", "pipe", "pipe"],
       ...options,
     });
@@ -89,16 +89,16 @@ async function stop(child) {
 
 const state = await mkdtemp(resolve(tmpdir(), "cybercore-mission-control-smoke-"));
 let worker;
+let workerOutput = "";
 try {
   const migration = await command(["d1", "migrations", "apply", "MISSION_CONTROL_DB", "--local", "--persist-to", state]);
   assert.equal(migration.code, 0, migration.stderr || migration.stdout);
 
   worker = spawn(npx, ["wrangler", "dev", "--local", "--persist-to", state, "--port", String(port), "--log-level", "error"], {
     cwd: ROOT,
-    env: { ...process.env, WRANGLER_LOG_PATH: "none" },
+    env: { ...process.env },
     stdio: ["ignore", "pipe", "pipe"],
   });
-  let workerOutput = "";
   worker.stdout.on("data", (chunk) => { workerOutput += chunk; });
   worker.stderr.on("data", (chunk) => { workerOutput += chunk; });
 
@@ -225,7 +225,7 @@ try {
   console.log("local smoke passed: health, migration, auth failures, registration, heartbeat bounds, live event, replay rejection, audit");
 } catch (error) {
   const message = error instanceof Error ? error.message : String(error);
-  throw new Error(`${message}\nworker output:\n${worker?.output ?? "(unavailable)"}`);
+  throw new Error(`${message}\nworker output:\n${workerOutput || "(unavailable)"}`);
 } finally {
   if (worker) await stop(worker);
   await rm(state, { recursive: true, force: true });
