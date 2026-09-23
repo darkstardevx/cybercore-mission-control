@@ -55,6 +55,22 @@ cargo test --locked
 cargo run --locked -p cybercore-agent -- --config connector/example-config.json once
 ```
 
+For the staging `diagprint` registration on Raven's Omarchy machine, create the two Cloudflare
+Access Service Auth files alongside the agent credential first:
+
+```sh
+install -Dm600 /dev/null /home/raven/.config/cybercore-agent/access-client-id
+install -Dm600 /dev/null /home/raven/.config/cybercore-agent/access-client-secret
+```
+
+Put the Access Client ID in the first file and the Access Client Secret in the second. The checked-in
+helper then creates an owner-only config and sends one heartbeat. Use `run` for periodic mode:
+
+```sh
+bash scripts/run-diagprint-agent.sh once
+bash scripts/run-diagprint-agent.sh run
+```
+
 Before running it, copy the example configuration, set a real Mission Control endpoint and agent
 ID, and provide the one-time credential through either an environment variable or an owner-only
 credential file. Non-loopback endpoints must use HTTPS. The periodic `run` mode has bounded

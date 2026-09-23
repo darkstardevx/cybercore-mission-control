@@ -7,6 +7,8 @@
     "connector": "cybercore-agent"
   },
   "credential_file": "/home/operator/.config/cybercore-agent/credential",
+  "access_client_id_file": "/home/operator/.config/cybercore-agent/access-client-id",
+  "access_client_secret_file": "/home/operator/.config/cybercore-agent/access-client-secret",
   "timeout_secs": 10,
   "interval_secs": 60,
   "max_retries": 3,

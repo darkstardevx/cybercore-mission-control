@@ -4,6 +4,8 @@
 
 ### Live agent lifecycle
 
+- Added optional Cloudflare Access Service Auth headers to the outbound connector, loaded from
+  owner-only files and never logged.
 - Added an operator-only dashboard registration panel that uses the existing admin session and shows
   each connector credential once without persisting it.
 - Added live `agent.registered` and `agent.status_changed` notifications alongside heartbeat events.

@@ -17,6 +17,7 @@ use url::Url;
 
 pub const MAX_PAYLOAD_BYTES: usize = 16 * 1024;
 pub const MAX_CREDENTIAL_BYTES: usize = 512;
+pub const MAX_ACCESS_CREDENTIAL_BYTES: usize = 512;
 pub const MAX_RETRIES: u8 = 5;
 pub const MAX_TIMEOUT_SECS: u64 = 60;
 pub const MAX_INTERVAL_SECS: u64 = 24 * 60 * 60;
@@ -88,6 +89,10 @@ pub struct Config {
     pub credential_file: Option<PathBuf>,
     #[serde(default)]
     pub credential_env: Option<String>,
+    #[serde(default)]
+    pub access_client_id_file: Option<PathBuf>,
+    #[serde(default)]
+    pub access_client_secret_file: Option<PathBuf>,
     #[serde(default = "default_timeout_secs")]
     pub timeout_secs: u64,
     #[serde(default = "default_interval_secs")]
@@ -172,6 +177,12 @@ impl Config {
                 "configure exactly one of credential_file or credential_env".into(),
             ));
         }
+        if self.access_client_id_file.is_some() != self.access_client_secret_file.is_some() {
+            return Err(ConnectorError::Configuration(
+                "configure both access_client_id_file and access_client_secret_file, or neither"
+                    .into(),
+            ));
+        }
         let payload = serde_json::to_vec(&self.payload)?;
         if payload.len() > MAX_PAYLOAD_BYTES {
             return Err(ConnectorError::PayloadTooLarge(payload.len()));
@@ -199,6 +210,22 @@ impl Config {
         };
         validate_credential(&value)?;
         Ok(value)
+    }
+
+    pub fn read_access_credentials(&self) -> Result<Option<(String, String)>, ConnectorError> {
+        let (Some(client_id_path), Some(client_secret_path)) = (
+            self.access_client_id_file.as_ref(),
+            self.access_client_secret_file.as_ref(),
+        ) else {
+            return Ok(None);
+        };
+        check_credential_permissions(client_id_path)?;
+        check_credential_permissions(client_secret_path)?;
+        let client_id = fs::read_to_string(client_id_path)?.trim().to_owned();
+        let client_secret = fs::read_to_string(client_secret_path)?.trim().to_owned();
+        validate_access_credential("Access client ID", &client_id)?;
+        validate_access_credential("Access client secret", &client_secret)?;
+        Ok(Some((client_id, client_secret)))
     }
 
     pub fn heartbeat_url(&self) -> Result<String, ConnectorError> {
@@ -231,6 +258,18 @@ fn validate_credential(value: &str) -> Result<(), ConnectorError> {
             .any(|b| b.is_ascii_whitespace() || b.is_ascii_control())
     {
         return Err(ConnectorError::Credential("credential is malformed".into()));
+    }
+    Ok(())
+}
+
+fn validate_access_credential(label: &str, value: &str) -> Result<(), ConnectorError> {
+    if value.is_empty()
+        || value.len() > MAX_ACCESS_CREDENTIAL_BYTES
+        || value
+            .bytes()
+            .any(|byte| byte.is_ascii_whitespace() || byte.is_ascii_control())
+    {
+        return Err(ConnectorError::Credential(format!("{label} is malformed")));
     }
     Ok(())
 }
@@ -270,6 +309,7 @@ pub struct HeartbeatResult {
 pub struct Connector {
     config: Config,
     credential: String,
+    access_credentials: Option<(String, String)>,
     agent: ureq::Agent,
 }
 
@@ -277,12 +317,22 @@ impl Connector {
     pub fn new(config: Config) -> Result<Self, ConnectorError> {
         let config = config.validate()?;
         let credential = config.read_credential()?;
-        Self::with_credential(config, credential)
+        let access_credentials = config.read_access_credentials()?;
+        Self::with_parts(config, credential, access_credentials)
     }
 
     pub fn with_credential(config: Config, credential: String) -> Result<Self, ConnectorError> {
         let config = config.validate()?;
         validate_credential(&credential)?;
+        let access_credentials = config.read_access_credentials()?;
+        Self::with_parts(config, credential, access_credentials)
+    }
+
+    fn with_parts(
+        config: Config,
+        credential: String,
+        access_credentials: Option<(String, String)>,
+    ) -> Result<Self, ConnectorError> {
         let agent = ureq::Agent::config_builder()
             .timeout_global(Some(Duration::from_secs(config.timeout_secs)))
             .max_redirects(0)
@@ -291,6 +341,7 @@ impl Connector {
         Ok(Self {
             config,
             credential,
+            access_credentials,
             agent,
         })
     }
@@ -371,16 +422,20 @@ impl Connector {
     }
 
     fn send_body(&self, url: &str, body: &[u8]) -> Result<Option<String>, ConnectorError> {
-        let response = self
+        let mut request = self
             .agent
             .post(url)
             .header("authorization", format!("Bearer {}", self.credential))
-            .header("content-type", "application/json")
-            .send(body)
-            .map_err(|error| match error {
-                ureq::Error::StatusCode(status) => ConnectorError::Server { status },
-                other => ConnectorError::Transport(sanitize_transport_error(&other.to_string())),
-            })?;
+            .header("content-type", "application/json");
+        if let Some((client_id, client_secret)) = &self.access_credentials {
+            request = request
+                .header("CF-Access-Client-Id", client_id)
+                .header("CF-Access-Client-Secret", client_secret);
+        }
+        let response = request.send(body).map_err(|error| match error {
+            ureq::Error::StatusCode(status) => ConnectorError::Server { status },
+            other => ConnectorError::Transport(sanitize_transport_error(&other.to_string())),
+        })?;
         let text = response.into_body().read_to_string().map_err(|error| {
             ConnectorError::Transport(sanitize_transport_error(&error.to_string()))
         })?;
@@ -436,6 +491,8 @@ mod tests {
             payload: Map::from_iter([(String::from("platform"), Value::String("test".into()))]),
             credential_file: None,
             credential_env: Some("TEST_CYBERCORE_CREDENTIAL".into()),
+            access_client_id_file: None,
+            access_client_secret_file: None,
             timeout_secs: 2,
             interval_secs: 1,
             max_retries: 0,

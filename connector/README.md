@@ -15,6 +15,8 @@ Copy [`example-config.json`](example-config.json) and set:
 - `endpoint`: the Mission Control base URL; HTTPS is required except for loopback test fixtures;
 - `agent_id`: the registered agent identifier;
 - exactly one of `credential_env` or `credential_file`;
+- optionally, both `access_client_id_file` and `access_client_secret_file` when the endpoint is
+  protected by Cloudflare Access Service Auth;
 - optional bounded `payload`, `timeout_secs`, `interval_secs`, `max_retries`, and `retry_delay_ms`.
 
 Register the agent through the admin API first. The returned `mc_...` credential is shown once.
@@ -26,6 +28,9 @@ printf '%s\n' 'mc_replace_me' > "$HOME/.config/cybercore-agent/credential"
 ```
 
 The connector refuses group/world-readable Unix credential files and never prints credentials.
+When Access Service Auth is enabled, both Access credential files must also be owner-only. The
+connector sends them as `CF-Access-Client-Id` and `CF-Access-Client-Secret` headers while keeping
+the `mc_...` agent credential in the `Authorization` header.
 
 ## Run
 
