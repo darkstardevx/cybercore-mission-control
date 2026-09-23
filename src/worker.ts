@@ -12,6 +12,7 @@ import {
 } from "./protocol";
 import {
   Env,
+  agentExistsInProject,
   audit,
   authenticateAgent,
   createAgent,
@@ -19,6 +20,7 @@ import {
   getProject,
   listAgents,
   listAudit,
+  listHeartbeats,
   listProjects,
   projectExists,
   recordHeartbeat,
@@ -132,6 +134,13 @@ async function handleApi(request: Request, env: Env): Promise<Response> {
 
   if (parts[0] === "api" && parts[1] === "projects" && parts[2]) {
     const projectId = parts[2];
+    if (request.method === "GET" && parts[3] === "agents" && parts[4] && parts[5] === "heartbeats") {
+      if (!adminAuthorized(request, env)) return adminFailure(id);
+      if (!await projectExists(env.MISSION_CONTROL_DB, projectId)) return json({ error: "project not found" }, 404, id);
+      const agentId = parts[4];
+      if (!await agentExistsInProject(env.MISSION_CONTROL_DB, projectId, agentId)) return json({ error: "agent not found" }, 404, id);
+      return json({ heartbeats: await listHeartbeats(env.MISSION_CONTROL_DB, projectId, agentId, Number(url.searchParams.get("limit") || 24)) }, 200, id);
+    }
     if (request.method === "GET" && parts[3] === "agents") {
       if (!adminAuthorized(request, env)) return adminFailure(id);
       if (!await projectExists(env.MISSION_CONTROL_DB, projectId)) return json({ error: "project not found" }, 404, id);
@@ -161,10 +170,25 @@ async function handleApi(request: Request, env: Env): Promise<Response> {
     if (!await projectExists(env.MISSION_CONTROL_DB, input.project_id)) return json({ error: "project not found" }, 404, id);
     const token = `mc_${crypto.randomUUID().replaceAll("-", "")}`;
     const created = await createAgent(env.MISSION_CONTROL_DB, input, await sha256(token));
-    await audit(env.MISSION_CONTROL_DB, {
+    const event = await audit(env.MISSION_CONTROL_DB, {
       project_id: input.project_id, actor: "operator", event_type: "agent.registered",
       resource_type: "agent", resource_id: created.agent.id, request_id: id,
       payload_json: JSON.stringify({ machine_id: created.machine.id, scopes: input.scopes }),
+    });
+    await publish(env, input.project_id, {
+      type: event.event_type,
+      occurred_at: event.occurred_at,
+      resource_id: event.resource_id,
+      payload: {
+        agent_id: created.agent.id,
+        machine_id: created.machine.id,
+        agent_name: created.agent.name,
+        agent_version: created.agent.version,
+        machine_name: created.machine.name,
+        platform: created.machine.platform,
+        connector_version: created.machine.connector_version,
+        status: created.machine.status,
+      },
     });
     return json({ agent: { id: created.agent.id, machine_id: created.machine.id, name: created.agent.name, scopes: input.scopes }, credential: token }, 201, id);
   }
@@ -186,6 +210,21 @@ async function handleApi(request: Request, env: Env): Promise<Response> {
         payload_json: JSON.stringify({ heartbeat_id: recorded.heartbeatId, machine_id: recorded.machineId, status: heartbeat.status }),
       });
       await publish(env, agent.project_id, { type: event.event_type, occurred_at: event.occurred_at, resource_id: event.resource_id, payload: JSON.parse(event.payload_json) });
+      const status = heartbeat.status ?? "online";
+      if (recorded.previousStatus !== status) {
+        await publish(env, agent.project_id, {
+          type: "agent.status_changed",
+          occurred_at: event.occurred_at,
+          resource_id: agent.id,
+          payload: {
+            agent_id: agent.id,
+            machine_id: recorded.machineId,
+            previous_status: recorded.previousStatus,
+            status,
+            last_seen_at: heartbeat.observed_at,
+          },
+        });
+      }
       return json({ accepted: true, heartbeat_id: recorded.heartbeatId, observed_at: heartbeat.observed_at }, 202, id);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);

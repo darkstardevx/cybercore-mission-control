@@ -15,7 +15,9 @@ does not lose state.
 ## Current boundary
 
 P3-M001 implements project creation, agent registration, heartbeat ingestion, project/agent
-listing, audit retrieval, and a project event-channel interface. R2 artifact storage and the Rust
+listing, heartbeat history, audit retrieval, and a project event-channel interface. Registration and
+status transitions are published after their durable write. The dashboard derives a stale state from
+the last observed heartbeat after 90 seconds without mutating D1. R2 artifact storage and the Rust
 connector are follow-on milestones.
 
 Cloudflare Access protects the initial private dashboard. Application-level multi-user roles and
@@ -29,6 +31,10 @@ public authentication are intentionally deferred.
 - `heartbeats` owns replay-protected observations.
 - `audit_events` owns the durable history of accepted mutations.
 - Durable Objects only coordinate live subscribers; they do not replace D1.
+
+The authenticated heartbeat-history route is project-scoped. A live `agent.registered` event carries
+enough metadata for connected dashboards to add the agent without refresh; `agent.status_changed`
+events carry the previous and current machine status. The event channel remains observation-only.
 
 ## Failure behavior
 

@@ -23,7 +23,7 @@ type MachineRow = {
   connector_version: string;
   created_at: string;
   last_seen_at: string | null;
-  status: "online" | "offline" | "unknown";
+  status: "online" | "offline" | "degraded" | "unknown";
 };
 
 type AgentRow = {
@@ -51,6 +51,15 @@ export type AuditEvent = {
   resource_id: string | null;
   request_id: string;
   occurred_at: string;
+  payload_json: string;
+};
+
+export type HeartbeatRecord = {
+  id: string;
+  agent_id: string;
+  observed_at: string;
+  nonce: string;
+  status: "online" | "offline" | "degraded";
   payload_json: string;
 };
 
@@ -122,11 +131,33 @@ export async function listAgents(db: D1Database, projectId: string): Promise<Arr
   return result.results.map((row) => ({ ...row, scopes: JSON.parse(String(row.scopes_json)) }));
 }
 
+export async function agentExistsInProject(db: D1Database, projectId: string, agentId: string): Promise<boolean> {
+  const row = await db.prepare(
+    "SELECT a.id FROM agents a JOIN machines m ON m.id = a.machine_id WHERE a.id = ?1 AND m.project_id = ?2",
+  ).bind(agentId, projectId).first<{ id: string }>();
+  return Boolean(row);
+}
+
+export async function listHeartbeats(
+  db: D1Database,
+  projectId: string,
+  agentId: string,
+  limit = 24,
+): Promise<HeartbeatRecord[]> {
+  const bounded = Math.max(1, Math.min(limit, 100));
+  const result = await db.prepare(
+    "SELECT h.id, h.agent_id, h.observed_at, h.nonce, h.status, h.payload_json FROM heartbeats h JOIN agents a ON a.id = h.agent_id JOIN machines m ON m.id = a.machine_id WHERE h.agent_id = ?1 AND m.project_id = ?2 ORDER BY h.observed_at DESC LIMIT ?3",
+  ).bind(agentId, projectId, bounded).all<HeartbeatRecord>();
+  return result.results.map((row) => ({ ...row, payload_json: row.payload_json }));
+}
+
 export async function recordHeartbeat(
   db: D1Database,
   agent: AuthenticatedAgent,
   heartbeat: HeartbeatInput,
-): Promise<{ heartbeatId: string; machineId: string }> {
+): Promise<{ heartbeatId: string; machineId: string; previousStatus: MachineRow["status"] }> {
+  const machine = await db.prepare("SELECT status FROM machines WHERE id = ?1").bind(agent.machine_id).first<Pick<MachineRow, "status">>();
+  const previousStatus = machine?.status ?? "unknown";
   const heartbeatId = id("hb");
   await db.prepare(
     "INSERT INTO heartbeats (id, agent_id, observed_at, nonce, status, payload_json) VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
@@ -134,7 +165,7 @@ export async function recordHeartbeat(
   await db.prepare(
     "UPDATE machines SET last_seen_at = ?1, status = ?2, platform = platform, connector_version = connector_version WHERE id = ?3",
   ).bind(heartbeat.observed_at, heartbeat.status ?? "online", agent.machine_id).run();
-  return { heartbeatId, machineId: agent.machine_id };
+  return { heartbeatId, machineId: agent.machine_id, previousStatus };
 }
 
 export async function listAudit(db: D1Database, projectId: string, limit = 50): Promise<AuditEvent[]> {

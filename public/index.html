@@ -9,7 +9,7 @@
     :root{color-scheme:dark;--void:#071014;--panel:#0d1a20;--line:#1d3f49;--text:#e8fffa;--muted:#7d9ba1;--dim:#46656d;--cyan:#00f0b5;--blue:#00d9ff;--pink:#ff2bb5;--amber:#ffbf4a;font:14px ui-monospace,SFMono-Regular,Menlo,monospace}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 90% 0,#18223b,transparent 32%),var(--void);color:var(--text)}body:before{content:'';position:fixed;inset:0;z-index:-1;background:linear-gradient(rgba(0,240,181,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,240,181,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:linear-gradient(to bottom,#000,transparent)}a{color:inherit}.shell{width:min(1280px,calc(100% - 32px));margin:0 auto}.top{display:flex;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line)}.brand{font-weight:700;letter-spacing:.13em}.brand b{color:var(--cyan)}.brand small{display:block;margin-top:4px;color:var(--muted);font-size:10px;font-weight:400;letter-spacing:.09em}.status{color:var(--cyan);font-size:11px}.status:before{content:'●';margin-right:8px;font-size:8px}.hero{display:flex;align-items:end;justify-content:space-between;gap:30px;padding:55px 0 30px}.kicker{color:var(--pink);font-size:11px;letter-spacing:.14em}.hero h1{max-width:700px;margin:11px 0 16px;font-size:clamp(36px,6vw,70px);line-height:.98;letter-spacing:-.05em}.hero h1 span{color:var(--cyan)}.hero p{max-width:620px;color:var(--muted);line-height:1.7}.mode{padding:12px 15px;border:1px solid var(--line);color:var(--amber);white-space:nowrap;font-size:11px}.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}.panel{border:1px solid var(--line);background:rgba(13,26,32,.86);box-shadow:0 16px 45px rgba(0,0,0,.25)}.panel-head{display:flex;justify-content:space-between;padding:13px 15px;border-bottom:1px solid var(--line);color:var(--muted);font-size:11px}.panel-head b{color:var(--text);font-weight:500}.overview{padding:17px}.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{padding:16px;border:1px solid var(--line);background:#0a151a}.metric label{display:block;margin-bottom:9px;color:var(--dim);font-size:10px;text-transform:uppercase}.metric strong{font-size:25px;color:var(--cyan)}.metric small{display:block;margin-top:5px;color:var(--muted);font-size:10px}.agents{padding:0}.agent{display:flex;align-items:center;justify-content:space-between;padding:14px 15px;border-bottom:1px solid var(--line)}.agent:last-child{border-bottom:0}.agent-name{display:flex;align-items:center;gap:9px}.dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 9px var(--cyan)}.dot.offline{background:var(--dim);box-shadow:none}.agent small{display:block;margin-top:4px;color:var(--muted);font-size:10px}.agent time{color:var(--dim);font-size:10px}.audit{margin-top:14px}.event{display:grid;grid-template-columns:130px 1fr 85px;gap:12px;padding:13px 15px;border-bottom:1px solid var(--line);font-size:11px}.event:last-child{border-bottom:0}.event time{color:var(--dim)}.event b{font-weight:500;color:var(--cyan)}.event span{color:var(--muted);text-align:right}.footer{display:flex;justify-content:space-between;gap:15px;margin:27px 0 35px;color:var(--dim);font-size:10px}.footer a{color:var(--cyan)}.demo{color:var(--amber)}@media(max-width:850px){.hero{display:block}.mode{display:inline-block;margin-top:12px}.grid{grid-template-columns:1fr}.metric-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.shell{width:min(100% - 22px,1280px)}.metric-grid{grid-template-columns:1fr}.event{grid-template-columns:1fr;gap:4px}.event span{text-align:left}.footer{align-items:flex-start;flex-direction:column}}
     .operator{display:flex;align-items:center;gap:8px}.operator input{width:min(250px,35vw);padding:9px 10px;border:1px solid var(--line);background:#091419;color:var(--text);font:inherit;font-size:11px}.operator button,.toolbar button{padding:9px 12px;border:1px solid var(--cyan);background:transparent;color:var(--cyan);font:inherit;font-size:10px;letter-spacing:.08em;cursor:pointer}.operator button:hover,.toolbar button:hover{background:rgba(0,240,181,.12)}.toolbar{display:flex;align-items:center;gap:12px;padding:12px 15px;margin:18px 0 14px}.toolbar label{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:10px;letter-spacing:.08em}.toolbar select{min-width:260px;padding:8px 10px;border:1px solid var(--line);background:#091419;color:var(--text);font:inherit;font-size:11px}.toolbar select:disabled{opacity:.6}.toolbar .message{margin-left:auto;color:var(--muted);font-size:10px}.toolbar .message.error{color:#ff718d}.empty{padding:24px 15px;color:var(--muted);font-size:11px}.mission{max-width:620px;margin-top:8px;color:var(--dim);font-size:11px}.status.warn{color:var(--amber)}@media(max-width:650px){.top{align-items:flex-start;gap:15px;flex-direction:column}.operator{width:100%}.operator input{flex:1;width:auto}.toolbar{align-items:flex-start;flex-direction:column}.toolbar .message{margin-left:0}.toolbar select{width:100%}}
     .bootstrap{padding:17px;margin:0 0 14px}.bootstrap form{display:grid;grid-template-columns:1fr 1.5fr auto;gap:10px;align-items:end}.bootstrap label{display:block;color:var(--muted);font-size:10px;letter-spacing:.08em}.bootstrap input,.bootstrap textarea{display:block;width:100%;margin-top:7px;padding:9px 10px;border:1px solid var(--line);background:#091419;color:var(--text);font:inherit;font-size:11px}.bootstrap textarea{min-height:38px;resize:vertical}.bootstrap button{padding:10px 14px;border:1px solid var(--cyan);background:var(--cyan);color:#041114;font:inherit;font-size:10px;letter-spacing:.08em;cursor:pointer}.bootstrap button:hover{filter:brightness(1.1)}@media(max-width:650px){.bootstrap form{grid-template-columns:1fr}.bootstrap button{width:100%}}
-    .activity-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.activity-grid .audit{margin-top:0}.stream-meta{display:flex;align-items:center;gap:10px}.stream-status{font-size:9px;letter-spacing:.06em}.stream-status.connected{color:var(--cyan)}.stream-status.reconnecting{color:var(--amber)}.stream-status.disconnected{color:var(--dim)}.stream-last{color:var(--dim);font-size:10px}.live-event b{color:var(--blue)}@media(max-width:850px){.activity-grid{grid-template-columns:1fr}}
+    .activity-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.activity-grid .audit{margin-top:0}.stream-meta{display:flex;align-items:center;gap:10px}.stream-status{font-size:9px;letter-spacing:.06em}.stream-status.connected{color:var(--cyan)}.stream-status.reconnecting{color:var(--amber)}.stream-status.disconnected{color:var(--dim)}.stream-last{color:var(--dim);font-size:10px}.live-event b{color:var(--blue)}.agent{width:100%;margin:0;border:0;background:transparent;text-align:left;color:var(--text);font:inherit;cursor:pointer}.agent:hover,.agent.selected{background:rgba(0,240,181,.07)}.agent-status{display:block;margin-top:4px;color:var(--muted);font-size:10px}.dot.degraded,.dot.stale{background:var(--amber);box-shadow:0 0 9px var(--amber)}.dot.unknown{background:var(--dim);box-shadow:none}.agent-detail{border-top:1px solid var(--line)}.agent-detail .panel-head{padding-top:12px}.agent-detail-body{padding:14px 15px}.agent-detail-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;color:var(--muted);font-size:10px}.agent-detail-meta b{display:block;margin-top:3px;color:var(--text);font-weight:400}.heartbeat-row{display:grid;grid-template-columns:70px 1fr;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:10px}.heartbeat-row time{color:var(--dim)}.heartbeat-row b{color:var(--cyan);font-weight:500}.heartbeat-row small{display:block;margin-top:3px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.stale-note{color:var(--amber)}@media(max-width:850px){.activity-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -20,19 +20,28 @@
     <section class="panel bootstrap" id="bootstrap-panel" hidden><div class="panel-head"><b>BOOTSTRAP PROJECT</b><span>operator action</span></div><form id="project-form"><label>NAME<input id="project-name" required maxlength="120" placeholder="e.g. Cybercore Core"></label><label>MISSION<textarea id="project-mission-input" maxlength="500" placeholder="What should this project accomplish?"></textarea></label><button type="submit">CREATE PROJECT</button></form></section>
     <main class="grid">
       <section class="panel"><div class="panel-head"><b id="project-title">PROJECT / CYBERCORE</b><span id="project-updated">demo snapshot</span></div><div class="overview"><div class="metric-grid"><div class="metric"><label>agents online</label><strong id="online-count">2</strong><small id="agent-count-note">of 3 registered</small></div><div class="metric"><label>heartbeats</label><strong id="heartbeat-count">184</strong><small id="heartbeat-note">demo snapshot</small></div><div class="metric"><label>audit events</label><strong id="audit-count">42</strong><small id="audit-note">durable records</small></div></div><div class="activity-grid"><div class="panel audit"><div class="panel-head"><b>RECENT AUDIT</b><span id="audit-mode">durable first</span></div><div id="events"><div class="event"><time>09:41:22Z</time><b>agent.heartbeat</b><span>cyberdeck-local</span></div><div class="event"><time>09:38:07Z</time><b>project.created</b><span>operator</span></div><div class="event"><time>09:31:44Z</time><b>agent.registered</b><span>operator</span></div></div></div><div class="panel audit live-event"><div class="panel-head"><b>LIVE ACTIVITY</b><span class="stream-meta"><i class="stream-status disconnected" id="stream-status">STREAM DISCONNECTED</i><span class="stream-last" id="stream-last-event">no events yet</span></span></div><div id="live-events"><div class="empty">Connect to observe live agent events.</div></div></div></div></div></section>
-      <aside class="panel agents"><div class="panel-head"><b>REGISTERED AGENTS</b><span id="agent-total">3 total</span></div><div id="agent-list"><div class="agent"><div class="agent-name"><i class="dot"></i><div>cyberdeck-local<small>Linux · connector 0.1.0</small></div></div><time>12s ago</time></div><div class="agent"><div class="agent-name"><i class="dot"></i><div>agentforge-dev<small>Linux · connector 0.1.0</small></div></div><time>48s ago</time></div><div class="agent"><div class="agent-name"><i class="dot offline"></i><div>cyberterm-lab<small>Linux · last seen 2h ago</small></div></div><time>offline</time></div></div></aside>
+      <aside class="panel agents"><div class="panel-head"><b>REGISTERED AGENTS</b><span id="agent-total">3 total</span></div><div id="agent-list"><div class="agent"><div class="agent-name"><i class="dot"></i><div>cyberdeck-local<small>Linux · connector 0.1.0</small></div></div><time>12s ago</time></div><div class="agent"><div class="agent-name"><i class="dot"></i><div>agentforge-dev<small>Linux · connector 0.1.0</small></div></div><time>48s ago</time></div><div class="agent"><div class="agent-name"><i class="dot offline"></i><div>cyberterm-lab<small>Linux · last seen 2h ago</small></div></div><time>offline</time></div></div><section class="agent-detail" id="agent-detail" hidden><div class="panel-head"><b id="agent-detail-title">AGENT DETAIL</b><span id="agent-detail-status"></span></div><div class="agent-detail-body" id="agent-detail-body"></div></section></aside>
     </main>
     <footer class="footer"><span>private foundation // P3-M001</span><span><a href="https://github.com/darkstardevx/cybercore-mission-control">source ↗</a> · D1 + Durable Objects</span></footer>
   </div>
   <script>
     (() => {
-      const state = { token: localStorage.getItem('mcAdminToken') || '', projects: [], projectId: '', agents: [], liveEvents: [], socket: null, streamGeneration: 0, reconnectTimer: null, reconnectAttempt: 0 };
+      const state = { token: localStorage.getItem('mcAdminToken') || '', projects: [], projectId: '', agents: [], liveEvents: [], selectedAgentId: '', selectedHeartbeats: [], staleAgentIds: new Set(), socket: null, streamGeneration: 0, reconnectTimer: null, reconnectAttempt: 0 };
       const LIVE_EVENT_LIMIT = 12;
+      const HEARTBEAT_HISTORY_LIMIT = 24;
+      const STALE_AFTER_MS = 90 * 1000;
       const $ = (id) => document.getElementById(id);
       const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
       const formatTime = (value) => { const date = new Date(value); return Number.isNaN(date.valueOf()) ? '—' : date.toISOString().slice(11, 19) + 'Z'; };
       const setMessage = (message, error = false) => { $('data-message').textContent = message; $('data-message').classList.toggle('error', error); };
       const headers = () => ({ 'x-mission-control-admin': state.token });
+      const parsePayload = (value) => { try { return typeof value === 'string' ? JSON.parse(value) : (value || {}); } catch { return {}; } };
+      function effectiveStatus(agent) {
+        const status = agent.status || 'unknown';
+        const lastSeen = agent.last_seen_at ? Date.parse(agent.last_seen_at) : NaN;
+        return status !== 'offline' && Number.isFinite(lastSeen) && Date.now() - lastSeen > STALE_AFTER_MS ? 'stale' : status;
+      }
+      function statusLabel(status) { return ({ online: 'ONLINE', offline: 'OFFLINE', degraded: 'DEGRADED', stale: 'STALE', unknown: 'WAITING' })[status] || String(status).toUpperCase(); }
       function setStreamStatus(status, detail = '') {
         const labels = { connected: 'STREAM CONNECTED', reconnecting: 'STREAM RECONNECTING', disconnected: 'STREAM DISCONNECTED' };
         const element = $('stream-status');
@@ -48,20 +57,31 @@
           return `<div class="event"><time>${formatTime(event.occurred_at)}</time><b>${escapeHtml(event.type || 'event')}</b><span>${escapeHtml(`${actor}${status}`)}</span></div>`;
         }).join('') : '<div class="empty">Waiting for live agent events.</div>';
       }
+      function addLiveEvent(event) {
+        state.liveEvents = [{ ...event, payload: event.payload && typeof event.payload === 'object' ? event.payload : {} }, ...state.liveEvents].slice(0, LIVE_EVENT_LIMIT);
+        renderLiveEvents(state.liveEvents);
+        $('stream-last-event').textContent = `last ${formatTime(event.occurred_at)}`;
+      }
       function handleStreamEvent(event) {
         if (!event || typeof event !== 'object') return;
         const payload = event.payload && typeof event.payload === 'object' ? event.payload : {};
-        const agent = state.agents.find((candidate) => candidate.id === event.resource_id || candidate.machine_id === payload.machine_id);
-        if (event.type === 'agent.heartbeat' && agent) {
-          agent.status = payload.status || 'online';
-          agent.last_seen_at = event.occurred_at || new Date().toISOString();
+        if (event.type === 'agent.registered' && payload.agent_id && !state.agents.some((candidate) => candidate.id === payload.agent_id)) {
+          state.agents = [...state.agents, { id: payload.agent_id, machine_id: payload.machine_id, name: payload.agent_name, version: payload.agent_version, machine_name: payload.machine_name, platform: payload.platform, connector_version: payload.connector_version, status: payload.status || 'unknown', last_seen_at: null }];
           renderAgents(state.agents);
-          $('heartbeat-count').textContent = String(Number($('heartbeat-count').textContent || 0) + 1);
-          $('heartbeat-note').textContent = 'including live events';
         }
-        state.liveEvents = [{ ...event, payload }, ...state.liveEvents].slice(0, LIVE_EVENT_LIMIT);
-        renderLiveEvents(state.liveEvents);
-        $('stream-last-event').textContent = `last ${formatTime(event.occurred_at)}`;
+        const agent = state.agents.find((candidate) => candidate.id === event.resource_id || candidate.id === payload.agent_id || candidate.machine_id === payload.machine_id);
+        if ((event.type === 'agent.heartbeat' || event.type === 'agent.status_changed') && agent) {
+          agent.status = payload.status || 'online';
+          agent.last_seen_at = payload.last_seen_at || event.occurred_at || new Date().toISOString();
+          state.staleAgentIds.delete(agent.id);
+          renderAgents(state.agents);
+          if (event.type === 'agent.heartbeat') {
+            $('heartbeat-count').textContent = String(Number($('heartbeat-count').textContent || 0) + 1);
+            $('heartbeat-note').textContent = 'including live events';
+          }
+          if (state.selectedAgentId === agent.id) loadAgentDetail(agent.id);
+        }
+        addLiveEvent({ ...event, payload });
       }
       function closeStream() {
         state.streamGeneration += 1;
@@ -118,16 +138,65 @@
         if (!response.ok) throw new Error(response.status === 401 ? 'operator token rejected' : `request failed (${response.status})`);
         return response.json();
       }
+      function renderAgentDetail(heartbeats = state.selectedHeartbeats) {
+        const detail = $('agent-detail');
+        const agent = state.agents.find((candidate) => candidate.id === state.selectedAgentId);
+        if (!agent) { detail.hidden = true; return; }
+        detail.hidden = false;
+        const status = effectiveStatus(agent);
+        $('agent-detail-title').textContent = `AGENT / ${agent.machine_name || agent.name}`;
+        $('agent-detail-status').textContent = statusLabel(status);
+        $('agent-detail-status').className = status === 'stale' ? 'stale-note' : '';
+        const seen = agent.last_seen_at ? formatTime(agent.last_seen_at) : 'never';
+        const history = heartbeats.length ? heartbeats.slice(0, HEARTBEAT_HISTORY_LIMIT).map((heartbeat) => {
+          const payload = parsePayload(heartbeat.payload_json);
+          const summary = Object.keys(payload).length ? JSON.stringify(payload) : 'no payload';
+          return `<div class="heartbeat-row"><time>${formatTime(heartbeat.observed_at)}</time><div><b>${escapeHtml(statusLabel(heartbeat.status))}</b><small title="${escapeHtml(summary)}">${escapeHtml(summary)}</small></div></div>`;
+        }).join('') : '<div class="empty">No heartbeat history recorded.</div>';
+        $('agent-detail-body').innerHTML = `<div class="agent-detail-meta"><div>platform<b>${escapeHtml(agent.platform || 'unknown')}</b></div><div>version<b>${escapeHtml(agent.version || agent.connector_version || 'unknown')}</b></div><div>last seen<b>${escapeHtml(seen)}</b></div><div>heartbeats<b>${heartbeats.length}</b></div></div><div class="panel-head"><b>HEARTBEAT HISTORY</b><span>${statusLabel(status)}</span></div>${history}`;
+      }
+      async function loadAgentDetail(agentId) {
+        if (!agentId || agentId !== state.selectedAgentId || !state.projectId) return;
+        try {
+          const data = await api(`/api/projects/${encodeURIComponent(state.projectId)}/agents/${encodeURIComponent(agentId)}/heartbeats?limit=${HEARTBEAT_HISTORY_LIMIT}`);
+          if (agentId !== state.selectedAgentId) return;
+          state.selectedHeartbeats = data.heartbeats || [];
+          renderAgentDetail();
+        } catch (error) {
+          if (agentId === state.selectedAgentId) $('agent-detail-body').innerHTML = `<div class="empty">${escapeHtml(error instanceof Error ? error.message : 'heartbeat history unavailable')}</div>`;
+        }
+      }
+      function selectAgent(agentId) {
+        state.selectedAgentId = agentId;
+        state.selectedHeartbeats = [];
+        renderAgents(state.agents);
+        renderAgentDetail();
+        loadAgentDetail(agentId);
+      }
+      function refreshAgentHealth() {
+        if (!state.token || !state.agents.length) return;
+        let changed = false;
+        for (const agent of state.agents) {
+          const stale = effectiveStatus(agent) === 'stale';
+          if (stale && !state.staleAgentIds.has(agent.id)) {
+            state.staleAgentIds.add(agent.id);
+            addLiveEvent({ type: 'agent.stale', occurred_at: new Date().toISOString(), resource_id: agent.id, payload: { agent_id: agent.id, machine_id: agent.machine_id, status: 'stale', last_seen_at: agent.last_seen_at } });
+            changed = true;
+          } else if (!stale && state.staleAgentIds.delete(agent.id)) changed = true;
+        }
+        if (changed) { renderAgents(state.agents); renderAgentDetail(); }
+      }
       function renderAgents(agents) {
         state.agents = agents;
         $('agent-total').textContent = `${agents.length} total`;
         $('agent-count-note').textContent = `of ${agents.length} registered`;
-        $('online-count').textContent = agents.filter((agent) => agent.status === 'online').length;
+        $('online-count').textContent = agents.filter((agent) => effectiveStatus(agent) === 'online').length;
         $('agent-list').innerHTML = agents.length ? agents.map((agent) => {
-          const online = agent.status === 'online';
+          const status = effectiveStatus(agent);
           const seen = agent.last_seen_at ? formatTime(agent.last_seen_at) : 'never';
-          return `<div class="agent"><div class="agent-name"><i class="dot${online ? '' : ' offline'}"></i><div>${escapeHtml(agent.machine_name || agent.name)}<small>${escapeHtml(agent.platform || 'unknown')} · connector ${escapeHtml(agent.connector_version || 'unknown')}</small></div></div><time>${online ? seen : 'offline'}</time></div>`;
+          return `<button type="button" class="agent${state.selectedAgentId === agent.id ? ' selected' : ''}" data-agent-id="${escapeHtml(agent.id)}"><div class="agent-name"><i class="dot ${status}"></i><div>${escapeHtml(agent.machine_name || agent.name)}<small>${escapeHtml(agent.platform || 'unknown')} · connector ${escapeHtml(agent.connector_version || 'unknown')}</small><span class="agent-status">${statusLabel(status)}</span></div></div><time>${status === 'offline' ? 'offline' : seen}</time></button>`;
         }).join('') : '<div class="empty">No agents registered for this project.</div>';
+        renderAgentDetail();
       }
       function renderAudit(events) {
         const heartbeatCount = events.filter((event) => event.event_type === 'agent.heartbeat').length;
@@ -147,6 +216,10 @@
         $('audit-mode').textContent = 'live durable state';
         renderAgents(agents.agents || []);
         renderAudit(audit.events || []);
+        state.selectedAgentId = '';
+        state.selectedHeartbeats = [];
+        state.staleAgentIds.clear();
+        renderAgentDetail();
         state.liveEvents = [];
         renderLiveEvents(state.liveEvents);
         $('stream-last-event').textContent = 'no events yet';
@@ -185,6 +258,7 @@
       $('refresh-button').addEventListener('click', () => state.token ? connect() : setMessage('Connect an operator token first.', true));
       $('new-project-button').addEventListener('click', () => { $('bootstrap-panel').hidden = false; $('project-name').focus(); });
       $('project-select').addEventListener('change', async (event) => { closeStream(); state.projectId = event.target.value; try { await loadProject(state.projectId); connectStream(state.projectId); setMessage('Project state refreshed.'); } catch (error) { setMessage(error instanceof Error ? error.message : 'project load failed', true); } });
+      $('agent-list').addEventListener('click', (event) => { const agent = event.target.closest('[data-agent-id]'); if (agent) selectAgent(agent.dataset.agentId); });
       $('admin-token').addEventListener('keydown', (event) => { if (event.key === 'Enter') connect(); });
       $('project-form').addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -196,6 +270,7 @@
         } catch (error) { setMessage(error instanceof Error ? error.message : 'project creation failed', true); }
       });
       if (state.token) { $('admin-token').value = state.token; connect(); }
+      window.setInterval(refreshAgentHealth, 5_000);
     })();
   </script>
 </body>

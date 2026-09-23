@@ -65,11 +65,20 @@ async function openEvents(base, projectId) {
     socket.addEventListener("open", () => { clearTimeout(timer); resolvePromise(); }, { once: true });
     socket.addEventListener("error", () => { clearTimeout(timer); reject(new Error("event WebSocket failed to open")); }, { once: true });
   });
-  const event = new Promise((resolvePromise, reject) => {
-    const timer = setTimeout(() => reject(new Error("event WebSocket message timeout")), 5_000);
-    socket.addEventListener("message", (message) => { clearTimeout(timer); resolvePromise(JSON.parse(message.data)); }, { once: true });
+  const queued = [];
+  const waiters = [];
+  socket.addEventListener("message", (message) => {
+    const event = JSON.parse(message.data);
+    const waiter = waiters.shift();
+    if (waiter) waiter(event); else queued.push(event);
   });
-  return { socket, event };
+  return {
+    socket,
+    nextEvent: () => queued.length ? Promise.resolve(queued.shift()) : new Promise((resolvePromise, reject) => {
+      const timer = setTimeout(() => reject(new Error("event WebSocket message timeout")), 5_000);
+      waiters.push((event) => { clearTimeout(timer); resolvePromise(event); });
+    }),
+  };
 }
 
 async function stop(child) {
@@ -120,6 +129,7 @@ try {
   assert.equal(project.response.status, 201);
   const projectId = project.body.project.id;
 
+  const events = await openEvents(base, projectId);
   const registration = await request(base, "/api/agents/register", {
     method: "POST",
     headers: { "x-mission-control-admin": "demo-admin" },
@@ -136,7 +146,9 @@ try {
   const agentId = registration.body.agent.id;
   const credential = registration.body.credential;
   assert.match(credential, /^mc_[a-z0-9]+$/);
-  const events = await openEvents(base, projectId);
+  const registeredEvent = await events.nextEvent();
+  assert.equal(registeredEvent.type, "agent.registered");
+  assert.equal(registeredEvent.payload.agent_id, agentId);
 
   const missingCredential = await request(base, `/api/agents/${agentId}/heartbeat`, {
     method: "POST",
@@ -205,8 +217,35 @@ try {
     body: JSON.stringify(heartbeat),
   });
   assert.equal(accepted.response.status, 202);
-  const liveEvent = await events.event;
+  const liveEvent = await events.nextEvent();
   assert.equal(liveEvent.type, "agent.heartbeat");
+  const statusEvent = await events.nextEvent();
+  assert.equal(statusEvent.type, "agent.status_changed");
+  assert.equal(statusEvent.payload.previous_status, "unknown");
+  assert.equal(statusEvent.payload.status, "online");
+
+  const degraded = await request(base, `/api/agents/${agentId}/heartbeat`, {
+    method: "POST",
+    headers: { authorization: `Bearer ${credential}` },
+    body: JSON.stringify({ nonce: `smoke-degraded-${Date.now()}`, observed_at: new Date().toISOString(), status: "degraded" }),
+  });
+  assert.equal(degraded.response.status, 202);
+  assert.equal((await events.nextEvent()).type, "agent.heartbeat");
+  const degradedStatus = await events.nextEvent();
+  assert.equal(degradedStatus.type, "agent.status_changed");
+  assert.equal(degradedStatus.payload.status, "degraded");
+
+  const agentList = await request(base, `/api/projects/${projectId}/agents`, {
+    headers: { "x-mission-control-admin": "demo-admin" },
+  });
+  assert.equal(agentList.response.status, 200);
+  assert.equal(agentList.body.agents.find((agent) => agent.id === agentId).status, "degraded");
+
+  const history = await request(base, `/api/projects/${projectId}/agents/${agentId}/heartbeats?limit=10`, {
+    headers: { "x-mission-control-admin": "demo-admin" },
+  });
+  assert.equal(history.response.status, 200);
+  assert.equal(history.body.heartbeats.length, 2);
   events.socket.close();
 
   const replayed = await request(base, `/api/agents/${agentId}/heartbeat`, {
@@ -222,7 +261,7 @@ try {
   });
   assert.equal(audit.response.status, 200);
   assert.ok(audit.body.events.length >= 3);
-  console.log("local smoke passed: health, migration, auth failures, registration, heartbeat bounds, live event, replay rejection, audit");
+  console.log("local smoke passed: health, migration, auth failures, registration stream, heartbeat bounds, status stream, history, replay rejection, audit");
 } catch (error) {
   const message = error instanceof Error ? error.message : String(error);
   throw new Error(`${message}\nworker output:\n${workerOutput || "(unavailable)"}`);

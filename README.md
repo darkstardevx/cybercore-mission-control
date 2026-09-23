@@ -38,7 +38,9 @@ authorizes the dashboard API. No token is bundled into the static assets.
 
 After connecting, the dashboard exposes a small operator bootstrap form when the database has no
 projects. Create the first project there; agent registration and heartbeat traffic then populate
-the live agent and audit panels through the connector API.
+the live agent and audit panels through the connector API. Selecting an agent opens its recent
+heartbeat history. The dashboard marks agents stale after 90 seconds without a heartbeat; this is a
+derived view state and does not change durable machine state.
 
 ## Experimental Rust connector
 
@@ -66,13 +68,15 @@ GET  /api/projects
 GET  /api/projects/:id
 POST /api/agents/register
 GET  /api/projects/:id/agents
+GET  /api/projects/:id/agents/:agent_id/heartbeats
 GET  /api/projects/:id/audit
 POST /api/agents/:id/heartbeat
 GET  /api/projects/:id/events
 ```
 
 Admin routes require `x-mission-control-admin`. Agent heartbeats require the scoped Bearer
-credential returned once by agent registration. See [the connector protocol](docs/CONNECTOR_PROTOCOL.md).
+credential returned once by agent registration. Project event streams publish `agent.registered`,
+`agent.heartbeat`, and `agent.status_changed` notifications. See [the connector protocol](docs/CONNECTOR_PROTOCOL.md).
 
 ## Cloudflare setup
 

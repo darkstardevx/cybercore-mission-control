@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### Live agent lifecycle
+
+- Added live `agent.registered` and `agent.status_changed` notifications alongside heartbeat events.
+- Added project-scoped heartbeat history retrieval and a selectable dashboard agent detail view.
+- Added live agent list reconciliation, online-count updates, and derived 90-second stale detection.
+- Added migration support for durable `degraded` machine status.
+
 ### Production-readiness foundations
 
 - Added explicit local, staging, and production Wrangler environment boundaries.
