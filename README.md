@@ -102,6 +102,10 @@ boundary, required secret names, rollback procedure, and Cloudflare Access requi
 [deployment readiness](docs/DEPLOYMENT.md). No production account IDs, credentials, or private
 reports belong in this repository.
 
+After the GitHub `staging` environment is configured and protected, pushes to `main` deploy the
+staging Worker automatically after the full CI matrix passes and an environment approval is granted.
+The deployment does not apply D1 migrations; those remain a deliberate operator step.
+
 ## Boundaries
 
 Mission Control is an observation plane. It does not execute shell commands, open inbound ports on

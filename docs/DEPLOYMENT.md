@@ -5,7 +5,7 @@ Mission Control uses three explicit Wrangler environments:
 | Environment | Purpose | Deployment posture |
 | --- | --- | --- |
 | `local` | Disposable D1/Worker development | Safe default; no Cloudflare credentials required |
-| `staging` | Synthetic or non-production validation | Requires an explicit approval gate and staging bindings |
+| `staging` | Synthetic or non-production validation | Pushes to `main` deploy after CI and protected-environment approval |
 | `production` | Real operator data | Deliberately blocked until reviewed and explicitly acknowledged |
 
 ## Preflight
@@ -52,6 +52,28 @@ For a reviewed, non-mutating staging check, manually dispatch the `Staging dry r
 enter `STAGING_DRY_RUN`. The workflow is attached to the protected `staging` environment and only
 performs the same preflight, protocol tests, and Wrangler binding dry run. It has no production
 deployment step and never selects the `production` Wrangler environment.
+
+## Automatic staging deployment
+
+Pushes to `main` run the full CI workflow first. If every CI job passes, the `Deploy staging Worker`
+job waits at the protected GitHub `staging` environment gate and then runs the explicit staging
+preflight followed by `npx wrangler deploy --env=staging`. Pull requests and manual dry runs never
+deploy.
+
+Configure these values on the GitHub `staging` environment before enabling approval:
+
+- variable `CLOUDFLARE_ACCOUNT_ID` — the Cloudflare account that owns the staging Worker;
+- secret `CLOUDFLARE_API_TOKEN` — a narrowly scoped token that can deploy this Worker and its
+  staging resources;
+- secret `ADMIN_TOKEN` — the staging application token, also stored as the Worker secret.
+
+The deployment job sets `CYBERCORE_DEPLOY_APPROVED=yes` only after the protected environment has
+been granted to the job. It deploys Worker code and assets but deliberately does not apply D1
+migrations. Apply a reviewed staging migration separately with:
+
+```sh
+npx wrangler d1 migrations apply MISSION_CONTROL_DB --env=staging --remote
+```
 
 ## Disposable local smoke
 
@@ -101,10 +123,10 @@ The dashboard must not receive real project data until these controls are confir
 
 ## Deployment boundary
 
-This milestone does not deploy Cloudflare or create production credentials. Before a real staging
-deployment, place the dashboard behind Cloudflare Access, apply migrations deliberately, set the
-`ADMIN_TOKEN` as a Wrangler secret, run the end-to-end smoke checks, and record the exact release
-and migration evidence. Keep Worker deployment separate from connector release publication.
+The automatic job deploys only the protected staging environment; it does not deploy production or
+create production credentials. Before enabling it, place the dashboard behind Cloudflare Access,
+set the `ADMIN_TOKEN` as a Wrangler secret, run the end-to-end smoke checks, and record the exact
+release and migration evidence. Keep Worker deployment separate from connector release publication.
 
 ## Recovery
 

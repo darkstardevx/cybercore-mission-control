@@ -55,3 +55,32 @@ jobs:
         run: npm run preflight && npm run test:preflight && npm run test:protocol
       - name: Validate staging bindings
         run: npx wrangler deploy --env=staging --dry-run --outdir /tmp/cybercore-mission-control-dry-run
+
+  deploy-staging:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Deploy staging Worker
+    needs: [rust-connector, worker]
+    runs-on: ubuntu-24.04
+    environment: staging
+    concurrency:
+      group: cybercore-mission-control-staging
+      cancel-in-progress: false
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
+      CYBERCORE_DEPLOY_APPROVED: yes
+    steps:
+      - name: Check out
+        uses: actions/checkout@v5
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Validate explicit staging deployment boundary
+        run: npm run preflight -- --environment staging
+      - name: Deploy staging Worker
+        run: npx wrangler deploy --env=staging
