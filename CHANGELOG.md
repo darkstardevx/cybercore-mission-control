@@ -4,6 +4,8 @@
 
 ### Live agent lifecycle
 
+- Added an operator-only dashboard registration panel that uses the existing admin session and shows
+  each connector credential once without persisting it.
 - Added live `agent.registered` and `agent.status_changed` notifications alongside heartbeat events.
 - Added project-scoped heartbeat history retrieval and a selectable dashboard agent detail view.
 - Added live agent list reconciliation, online-count updates, and derived 90-second stale detection.

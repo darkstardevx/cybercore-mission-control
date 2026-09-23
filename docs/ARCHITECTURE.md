@@ -36,6 +36,10 @@ The authenticated heartbeat-history route is project-scoped. A live `agent.regis
 enough metadata for connected dashboards to add the agent without refresh; `agent.status_changed`
 events carry the previous and current machine status. The event channel remains observation-only.
 
+Agent registration is available only from the authenticated operator dashboard. The returned
+connector credential is rendered once in the current page and is not written to local storage,
+application state persistence, or server-side logs.
+
 ## Failure behavior
 
 Invalid credentials, unknown resources, stale/future observations, oversized payloads, and replayed

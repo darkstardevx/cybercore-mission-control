@@ -37,10 +37,12 @@ Control `ADMIN_TOKEN` to read operator data. Access authenticates the human; the
 authorizes the dashboard API. No token is bundled into the static assets.
 
 After connecting, the dashboard exposes a small operator bootstrap form when the database has no
-projects. Create the first project there; agent registration and heartbeat traffic then populate
-the live agent and audit panels through the connector API. Selecting an agent opens its recent
-heartbeat history. The dashboard marks agents stale after 90 seconds without a heartbeat; this is a
-derived view state and does not change durable machine state.
+projects. Create the first project there; the operator-only **Register Agent** panel can then create
+connector identities for the selected project. Each credential is shown once for copying and is
+never persisted by the dashboard. Agent registration and heartbeat traffic populate the live agent
+and audit panels through the connector API. Selecting an agent opens its recent heartbeat history.
+The dashboard marks agents stale after 90 seconds without a heartbeat; this is a derived view state
+and does not change durable machine state.
 
 ## Experimental Rust connector
 
